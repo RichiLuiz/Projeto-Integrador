@@ -4,13 +4,17 @@ use master
 go
 drop database VanConecta
 */
+
+
 --Criação da Base de dados
 Create Database VanConecta
 go
 
+	
 -- Comando para acessar a base de dados criada
-Use VanConecta
+use VanConecta
 go
+
 
 -- Criação da tabela de Perfis
 Create table Roles
@@ -21,17 +25,20 @@ Rolename varchar(100) not null,
 )
 go
 
-
+	
 -- Criação da tabela de usuários
 Create table Users
 (
 UserID uniqueidentifier primary key, -- uniqueidentifier identificador unico Global
-Username varchar(100) not null,
+Username varchar(100) not null unique, -- 
+CreatedDate	datetime default getdate(), -- Coluna que marca a data em que o usuario foi criado
 LastActivityDate datetime default getdate(), --Coluna que identifica o ultimo horario de atividade/login do usuario. Usado Default getdate() pegar a data e hora da criação do usuario.
 CreateUser bit default 0, -- coluna do tipo bit, que identifica se o usuario pode criar outros usuarios. Default 0 para não criar usuarios.
 RoleID uniqueidentifier, -- RoleID como chave estrangeira para identificar a qual o tipo de Perfil do usuario 
+PasswordHash VARCHAR(255),
 CONSTRAINT fk_RoleID FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 )
+go
 
 
 -- Criação da tabela checkin checkout, 1 registro por checkin ou checkout do aluno.
@@ -53,7 +60,7 @@ CONSTRAINT fk_UserID_Aluno FOREIGN KEY (UserID_Aluno) REFERENCES Users(UserID)
 )
 go
 
-  
+	
 -- Criação da tabela com os detalhes do motorista, ainda estou mexendo
 Create table Motoristas (
 ID_Motorista int identity(1,1) primary key , 
@@ -76,7 +83,7 @@ CONSTRAINT fk_Motorista_UserID FOREIGN KEY (UserID) REFERENCES Users(UserID)
 )
 go
 
-  
+	
 -- Criação da tabela Veiculos
 Create table Veiculos (
 ID_Veiculo int identity(1,1) primary key,
@@ -93,12 +100,13 @@ CONSTRAINT fk_ID_Motorista FOREIGN KEY (ID_Motorista) REFERENCES Motoristas(ID_M
 )
 go
 
+	
 -- Criação da tabela Responsavel
 CREATE TABLE Responsaveis (
     ID_Responsavel  INT IDENTITY(1,1) PRIMARY KEY,
 	UserID uniqueidentifier not null,
     Nome VARCHAR(200)NOT NULL,
-    cpf CHAR(11)NOT NULL UNIQUE,
+    cpf CHAR(14)NOT NULL UNIQUE,
     Contato1 varchar(20)	not null,
 	Contato2 varchar(20)	null,
 	Contato3 varchar(20)	null,
@@ -111,26 +119,27 @@ CONSTRAINT fk_Responsavel_UserID FOREIGN KEY (UserID) REFERENCES Users(UserID)
 )
 go
 
-  
+	
 -- Criação da tabela Aluno
 CREATE TABLE Aluno (
     ID_Aluno INT IDENTITY(1,1) PRIMARY KEY,
     ID_Responsavel INT NOT NULL,
-    ID_Motorista INT NOT NULL,
+    ID_Motorista INT  NULL,
     Nome VARCHAR(100) NOT NULL,
     Data_Nascimento DATE NOT NULL,
     Escola VARCHAR(100) NOT NULL,
+	ID_Escola int null,
     Turno VARCHAR(10)  NOT NULL CHECK (turno IN ('Manha', 'Tarde', 'Noite')),
     Ponto_embarque    VARCHAR(200) NOT NULL,
     Ponto_desembarque VARCHAR(200) NOT NULL,
     Ativo BIT NOT NULL DEFAULT 1,
     CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),
 	ID_Relacao int not null,
+	observacao varchar(max),
+	 necessidadeespecial bit,
     CONSTRAINT FK_Aluno_Responsavel
         FOREIGN KEY (ID_Responsavel) REFERENCES Responsaveis(ID_Responsavel),
 
-    CONSTRAINT FK_Aluno_Motorista
-        FOREIGN KEY (ID_Motorista)   REFERENCES Motoristas(ID_Motorista),
 		
     CONSTRAINT FK_Relacao_Responsavel
         FOREIGN KEY (ID_Relacao)   REFERENCES Relacao_Responsaveis(ID_Relacao)
