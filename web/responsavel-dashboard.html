@@ -100,6 +100,15 @@
           <strong id="endereco"></strong>
         </div>
 
+        <div class="dashboard-item">
+          <span>NUMERO</span>
+          <strong id="numero"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>CEP</span>
+          <strong id="cep"></strong>
+        </div>
       </div>
 
     </section>
@@ -134,10 +143,6 @@
           <strong id="turno"></strong>
         </div>
 
-        <div class="dashboard-item">
-          <span>RELAÇÃO</span>
-          <strong id="relacao"></strong>
-        </div>
 
         <div class="dashboard-item">
           <span>NECESSIDADE ESPECIAL</span>
@@ -210,6 +215,12 @@
 
         document.getElementById('endereco')
           .innerText = result.responsavel.Endereco;
+        
+        document.getElementById('numero')
+          .innerText = result.responsavel.Numero;
+
+        document.getElementById('cep')
+          .innerText = result.responsavel.CEP;
 
         // =========================
         // ALUNO
@@ -235,9 +246,6 @@
         document.getElementById('turno')
           .innerText = result.aluno.Turno;
 
-        document.getElementById('relacao')
-          .innerText = result.aluno.Relacao;
-
         document.getElementById('necessidade')
           .innerText =
           result.aluno.NecessidadeEspecial
@@ -247,6 +255,7 @@
         document.getElementById('embarque')
           .innerText =
           result.aluno.Ponto_Embarque;
+
 
       } catch (err) {
 
