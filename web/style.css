@@ -992,3 +992,40 @@ body {
         font-size: 22px;
     }
 }
+
+
+
+.lista-escolas {
+
+    background: #fff;
+
+    border-radius: 10px;
+
+    max-height: 200px;
+
+    overflow-y: auto;
+
+    margin-top: 5px;
+
+    position: absolute;
+
+    width: 100%;
+
+    z-index: 999;
+}
+
+.item-escola {
+
+    padding: 12px;
+
+    cursor: pointer;
+
+    color: #000;
+
+    border-bottom: 1px solid #ddd;
+}
+
+.item-escola:hover {
+
+    background: #f1f1f1;
+}
