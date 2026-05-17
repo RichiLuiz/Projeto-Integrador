@@ -75,13 +75,36 @@ router.get('/dashboard/:username', async (req, res) => {
                 ? alunoResult.recordset[0]
                 : null;
 
+
+
+        // =========================
+        // Busca Motorista
+        // =========================
+
+        const motoristasResult =
+    await new sql.Request()
+        .query(`
+                    SELECT
+                    M.NomeMotorista,
+                    M.TempoExperiencia,
+                    M.RegiaoAtuacao,
+                    M.Contato1
+                    from Motoristas M
+                    WHERE M.Ativo=1 
+                `);
+
+
+
         // =========================
         // RETORNO
         // =========================
 
         res.json({
             responsavel,
-            aluno
+            aluno,
+            
+            motoristas:
+        motoristasResult.recordset
         });
 
     } catch (err) {
