@@ -31,7 +31,6 @@ Create table Users
 (
 UserID uniqueidentifier primary key, -- uniqueidentifier identificador unico Global
 Username varchar(100) not null unique, -- 
-CreatedDate	datetime default getdate(), -- Coluna que marca a data em que o usuario foi criado
 LastActivityDate datetime default getdate(), --Coluna que identifica o ultimo horario de atividade/login do usuario. Usado Default getdate() pegar a data e hora da criação do usuario.
 CreateUser bit default 0, -- coluna do tipo bit, que identifica se o usuario pode criar outros usuarios. Default 0 para não criar usuarios.
 RoleID uniqueidentifier, -- RoleID como chave estrangeira para identificar a qual o tipo de Perfil do usuario 
@@ -110,9 +109,10 @@ CREATE TABLE Responsaveis (
     Contato1 varchar(20)	not null,
 	Contato2 varchar(20)	null,
 	Contato3 varchar(20)	null,
-    Email VARCHAR(100)NULL,
+    Email VARCHAR(100)	NULL,
     Endereco VARCHAR(200)NOT NULL,
 	Numero varchar(50) not null,
+	CEP varchar(50) not null,
     Ativo BIT NOT NULL DEFAULT 1,
     CreatedDate    DATETIME	NOT NULL DEFAULT GETDATE(),
 	
