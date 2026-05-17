@@ -116,8 +116,12 @@
         <div class="form-row">
           <div class="form-group">
             <label for="escola">Escola *</label>
-            <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+            <input type="text" id="escola" name="lista-escolas" placeholder="Digite e procure o nome da escola" autocomplete="off"> 
+             <div id="lista-escolas" class="lista-escolas"></div>
+            
           </div>
+
+
           <div class="form-group">
             <label for="turno">Turno *</label>
             <select id="turno" name="turno" required>
@@ -164,6 +168,65 @@
 
   <script src="../FrontEnd/main.js"></script>
   
+
+<script>
+
+const escolaInput =
+document.getElementById('escola');
+
+const listaEscolas =
+document.getElementById('lista-escolas');
+
+escolaInput.addEventListener('input', async () => {
+
+    const termo = escolaInput.value;
+
+    if (termo.length < 3) {
+
+        listaEscolas.innerHTML = '';
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `http://localhost:3000/escolas/buscar?nome=${termo}`
+        );
+
+        const escolas = await response.json();
+
+        listaEscolas.innerHTML = '';
+
+        escolas.forEach(escola => {
+
+            const div = document.createElement('div');
+
+            div.classList.add('item-escola');
+
+            div.innerText = escola.NO_Entidade;
+
+            div.addEventListener('click', () => {
+
+                escolaInput.value =
+                    escola.NO_Entidade;
+
+                listaEscolas.innerHTML = '';
+            });
+
+            listaEscolas.appendChild(div);
+        });
+
+    } catch (err) {
+
+        console.log(err);
+    }
+
+});
+
+</script>
+
+
+
 
   <!-- Envio das informações para o backend -->
   <script>
