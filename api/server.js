@@ -18,6 +18,9 @@ require('./routes/motoristaDashboard');
 const responsavelDashboardRoutes =
 require('./routes/responsaveisDashboard');
 
+const escolasRoutes =
+require('./routes/escolas');
+
 const app = express();
 
 app.use(cors());
@@ -35,6 +38,9 @@ app.use('/responsaveis', responsaveisRoutes);
 
 app.use('/auth', authRoutes);
 
+app.use('/escolas', escolasRoutes);
+
+
 // DASHBOARDS
 
 app.use(
@@ -43,6 +49,7 @@ app.use(
 );
 
 app.use('/responsaveis', responsavelDashboardRoutes);
+
 
 // =========================
 
