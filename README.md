@@ -86,3 +86,5 @@ npm install uuid
 npm install cpf-cnpj-validator
 npm install dotenv
 npm start
+
+node server.js
