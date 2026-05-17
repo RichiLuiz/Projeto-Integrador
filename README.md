@@ -7,12 +7,14 @@ Aqui serão disponibilizados os arquivos do Projeto Integrador - VanConecta
 ## 📁 Estrutura do Projeto
 
 Projeto-Integrador/
-│
+
 ├── README.md
 │
 
 ├── database/
+
 │ ├── schema.sql # Estrutura do banco de dados
+
 │ ├── seeds.sql # Dados iniciais/exemplo
 │
 
