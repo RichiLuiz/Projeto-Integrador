@@ -995,6 +995,8 @@ body {
 
 
 
+
+
 .lista-escolas {
 
     background: #fff;
@@ -1028,4 +1030,16 @@ body {
 .item-escola:hover {
 
     background: #f1f1f1;
+}
+
+
+
+.input-field {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #dcdcdc;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    background: #fff;
 }
