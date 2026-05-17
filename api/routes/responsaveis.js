@@ -168,6 +168,7 @@ router.post('/cadastro', async (req, res) => {
 
         const idRelacao =
             relacaoResult.recordset[0].ID_Relacao;
+            
 
         // =========================
         // NECESSIDADE ESPECIAL
@@ -178,6 +179,23 @@ router.post('/cadastro', async (req, res) => {
             necessidades === true
                 ? 1
                 : 0;
+
+        // =========================
+        // BUSCA ID Escola
+        // =========================
+
+        const idescolaResult = await new sql.Request()
+            .input('Escola', sql.VarChar, escola)
+            .query(`
+                SELECT TOP 1 CO_Entidade
+                FROM [Importa_Censo_2025]
+                WHERE NO_Entidade = @Escola
+            `);
+
+        const idescola =
+            idescolaResult.recordset[0].CO_Entidade;
+
+
 
         // =========================
         // HASH SENHA
@@ -290,6 +308,7 @@ router.post('/cadastro', async (req, res) => {
             .input('NecessidadeEspecial', sql.Bit, necessidadeEspecial)
             .input('PontoEmbarque', sql.VarChar, endereco)
             .input('obs', sql.VarChar, obs)
+            .input('ID_Escola', sql.VarChar, idescola)
             .query(`
                 INSERT INTO Aluno
                 (
@@ -302,7 +321,8 @@ router.post('/cadastro', async (req, res) => {
                     NecessidadeEspecial,
                     Ponto_Embarque,
                     observacao,
-                    ponto_desembarque
+                    ponto_desembarque,
+                    id_escola
                 )
                 VALUES
                 (
@@ -315,7 +335,8 @@ router.post('/cadastro', async (req, res) => {
                     @NecessidadeEspecial,
                     @PontoEmbarque,
                     @obs,
-                    @Escola
+                    @Escola,
+                    @ID_Escola
                 )
             `);
 
