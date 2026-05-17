@@ -10,10 +10,12 @@ Projeto-Integrador/
 │
 ├── README.md
 │
+
 ├── database/
 │ ├── schema.sql # Estrutura do banco de dados
 │ ├── seeds.sql # Dados iniciais/exemplo
 │
+
 ├── web/ # Frontend
 │ ├── index.html # Página principal
 │ ├── cadastro-motorista.html # Página Cadastro Motorista
@@ -26,9 +28,11 @@ Projeto-Integrador/
 │ ├── responsavel.js
 │ ├── style.css
 │
+
 └── api/ # Backend
 │ ├── server.js
 │ ├──db.js
+
 ├── routes/ # Rotas da API
 │ ├── auth.js
 │ ├── motoristas.js
