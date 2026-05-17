@@ -41,13 +41,13 @@ Projeto-Integrador/
 │ ├── style.css
 │
 
-└── api/ # Backend
+├── api/ # Backend
 
 │ ├── server.js
 
 │ ├──db.js
 
-├── routes/ # Rotas da API
+└── routes/ # Rotas da API
 
 │ ├── auth.js
 
