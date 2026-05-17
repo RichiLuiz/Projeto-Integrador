@@ -163,6 +163,41 @@
 
     </section>
 
+
+
+    <!-- Procura motoristas -->
+<!-- MOTORISTAS -->
+
+<section class="dashboard-card">
+
+  <div class="card-title">
+    👨‍✈️ Motoristas Disponíveis
+  </div>
+
+  <div class="dashboard-grid">
+
+  <div class="dashboard-item">
+
+    <span>Selecionar Motorista</span>
+
+    <select id="motorista-select" class="input-field">
+      <option value="">
+        Selecione um motorista
+      </option>
+    </select>
+
+  </div>
+
+</div>
+
+<!-- CARD DETALHES -->
+<div id="detalhes-motorista"></div>
+
+</section>
+
+
+
+
   </main>
 
   <script>
@@ -263,6 +298,93 @@
         document.getElementById('embarque')
           .innerText =
           result.aluno.Ponto_Embarque;
+
+
+
+          // =========================
+// MOTORISTAS
+// =========================
+
+const selectMotorista =
+document.getElementById('motorista-select');
+
+const detalhesMotorista =
+document.getElementById('detalhes-motorista');
+
+// limpa select
+selectMotorista.innerHTML = `
+    <option value="">
+        Selecione um motorista
+    </option>
+`;
+
+// pega apenas os 10 primeiros
+const primeiros10 =
+    result.motoristas.slice(0, 10);
+
+// adiciona no select
+primeiros10.forEach((motorista, index) => {
+
+    selectMotorista.innerHTML += `
+    
+        <option value="${index}">
+            ${motorista.NomeMotorista}
+        </option>
+    `;
+});
+
+// quando selecionar
+selectMotorista.addEventListener('change', () => {
+
+    const motorista =
+        primeiros10[
+            selectMotorista.value
+        ];
+
+    // limpa
+    detalhesMotorista.innerHTML = '';
+
+    if (!motorista) return;
+
+    detalhesMotorista.innerHTML = `
+    
+        <div class="dashboard-card motorista-card">
+
+            <div class="dashboard-grid">
+
+                <div class="dashboard-item">
+                    <span>Motorista</span>
+                    <strong>
+                        ${motorista.NomeMotorista || '-'}
+                    </strong>
+                </div>
+
+                <div class="dashboard-item">
+                    <span>Contato</span>
+                    <strong>
+                        ${motorista.Contato1 || '-'}
+                    </strong>
+                </div>
+
+                <div class="dashboard-item">
+                    <span>Experiência</span>
+                    <strong>
+                        ${motorista.TempoExperiencia || 0} anos
+                    </strong>
+                </div>
+
+                <div class="dashboard-item">
+                    <span>Região</span>
+                    <strong>
+                        ${motorista.RegiaoAtuacao || '-'}
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+    `;
+});
 
 
       } catch (err) {
