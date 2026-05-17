@@ -29,7 +29,9 @@ router.post('/cadastro', async (req, res) => {
             escola,
             turno,
             obs,
-            necessidades
+            necessidades,
+            cep,
+            numero
         } = req.body;
 
         // =========================
@@ -239,6 +241,7 @@ router.post('/cadastro', async (req, res) => {
                 .input('Contato2', sql.VarChar, tel2)
                 .input('Email', sql.VarChar, email)
                 .input('Endereco', sql.VarChar, obs)
+                .input('CEP', sql.VarChar, cep)
                 .query(`
                     INSERT INTO Responsaveis
                     (
@@ -248,7 +251,9 @@ router.post('/cadastro', async (req, res) => {
                         Contato1,
                         Contato2,
                         Email,
-                        Endereco
+                        Endereco,
+                        cep,
+                        numero
                     )
 
                     OUTPUT INSERTED.ID_Responsavel
@@ -261,7 +266,9 @@ router.post('/cadastro', async (req, res) => {
                         @Contato1,
                         @Contato2,
                         @Email,
-                        @Endereco
+                        @Endereco,
+                        @CEP,
+                        @Numero
                     )
                 `);
 
