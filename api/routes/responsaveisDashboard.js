@@ -24,7 +24,10 @@ router.get('/dashboard/:username', async (req, res) => {
                     R.Contato2,
                     R.Email,
                     R.Endereco,
+                    R.Numero,
+                    R.CEP,
                     U.Username
+                    
                 FROM Responsaveis R
                 INNER JOIN Users U
                     ON R.UserID = U.UserID
@@ -59,13 +62,9 @@ router.get('/dashboard/:username', async (req, res) => {
                     A.Escola,
                     A.Turno,
                     A.NecessidadeEspecial,
-                    A.Ponto_Embarque,
-                    RR.Relacao
+                    Ponto_Embarque  = concat(substring(A.Ponto_embarque, 1, charindex(',',A.Ponto_embarque)), ' ', r.numero)
                 FROM Aluno A
-
-                LEFT JOIN Relacao_Responsaveis RR
-                    ON A.ID_Relacao = RR.ID_Relacao
-
+                join responsaveis R on a.ID_Responsavel=r.ID_Responsavel
                 WHERE A.ID_Responsavel = @ID_Responsavel
             `);
 
