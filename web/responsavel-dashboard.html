@@ -139,6 +139,11 @@
         </div>
 
         <div class="dashboard-item">
+          <span>CEP ESCOLA</span>
+          <strong id="cepescola"></strong>
+        </div>
+
+        <div class="dashboard-item">
           <span>TURNO</span>
           <strong id="turno"></strong>
         </div>
@@ -242,6 +247,9 @@
 
         document.getElementById('escola')
           .innerText = result.aluno.Escola;
+          
+        document.getElementById('cepescola')
+          .innerText = result.aluno.CO_CEP;
 
         document.getElementById('turno')
           .innerText = result.aluno.Turno;
