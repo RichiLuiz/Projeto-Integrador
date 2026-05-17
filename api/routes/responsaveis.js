@@ -240,8 +240,9 @@ router.post('/cadastro', async (req, res) => {
                 .input('Contato1', sql.VarChar, telefone)
                 .input('Contato2', sql.VarChar, tel2)
                 .input('Email', sql.VarChar, email)
-                .input('Endereco', sql.VarChar, obs)
+                .input('Endereco', sql.VarChar, endereco)
                 .input('CEP', sql.VarChar, cep)
+                .input('Numero', sql.VarChar, numero)
                 .query(`
                     INSERT INTO Responsaveis
                     (
