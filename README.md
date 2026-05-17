@@ -2,7 +2,7 @@
 Aqui serão disponibilizados os arquivos do Projeto Integrador - VanConecta
 
 
-##Estrutura do projeto
+#Estrutura do projeto
 
 Projeto-Integrador/
 ├── README.md
