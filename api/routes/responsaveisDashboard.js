@@ -1,97 +1,296 @@
-const express = require('express');
-const router = express.Router();
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-const { sql } = require('../db');
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-router.get('/dashboard/:username', async (req, res) => {
+  <title>Painel do Responsável — VanConecta</title>
 
-    try {
+  <link rel="stylesheet" href="style.css" />
 
-        const { username } = req.params;
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
 
-        // =========================
-        // BUSCA RESPONSÁVEL
-        // =========================
+<body class="dashboard-page">
 
-        const responsavelResult = await new sql.Request()
-            .input('Username', sql.VarChar, username)
-            .query(`
-                SELECT
-                    R.ID_Responsavel,
-                    R.Nome,
-                    R.CPF,
-                    R.Contato1,
-                    R.Contato2,
-                    R.Email,
-                    R.Endereco,
-                    R.Numero,
-                    R.CEP,
-                    U.Username
-                    
-                FROM Responsaveis R
-                INNER JOIN Users U
-                    ON R.UserID = U.UserID
-                WHERE U.Username = @Username
-            `);
+  <!-- NAVBAR -->
 
-        if (responsavelResult.recordset.length === 0) {
+  <nav class="navbar">
 
-            return res.status(404).json({
-                error: 'Responsável não encontrado'
-            });
+    <div class="nav-brand">
+
+      <span class="brand-icon">👨‍👩‍👧</span>
+
+      <span class="brand-name">
+        VanConecta — Área do Responsável
+      </span>
+
+    </div>
+
+    <div class="nav-links">
+
+      <a href="#" id="logout-btn">
+        Sair
+      </a>
+
+    </div>
+
+  </nav>
+
+  <!-- HEADER -->
+
+  <section class="dashboard-header">
+
+    <h1>
+      Bem-vindo responsável 👋
+    </h1>
+
+    <p>
+      Aqui você pode visualizar seus dados
+      e as informações do aluno cadastrado.
+    </p>
+
+  </section>
+
+  <!-- CONTAINER -->
+
+  <main class="dashboard-container">
+
+    <!-- RESPONSÁVEL -->
+
+    <section class="dashboard-card">
+
+      <div class="card-title">
+        👨‍👩‍👧 Dados do Responsável
+      </div>
+
+      <div class="dashboard-grid">
+
+        <div class="dashboard-item">
+          <span>NOME</span>
+          <strong id="nome"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>CPF</span>
+          <strong id="cpf"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>EMAIL</span>
+          <strong id="email"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>TELEFONE PRINCIPAL</span>
+          <strong id="telefone1"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>TELEFONE SECUNDÁRIO</span>
+          <strong id="telefone2"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>ENDEREÇO</span>
+          <strong id="endereco"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>NUMERO</span>
+          <strong id="numero"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>CEP</span>
+          <strong id="cep"></strong>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ALUNO -->
+
+    <section class="dashboard-card">
+
+      <div class="card-title">
+        🎒 Dados do Aluno
+      </div>
+
+      <div class="dashboard-grid">
+
+        <div class="dashboard-item">
+          <span>NOME DO ALUNO</span>
+          <strong id="aluno"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>DATA DE NASCIMENTO</span>
+          <strong id="nascimento"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>ESCOLA</span>
+          <strong id="escola"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>CEP ESCOLA</span>
+          <strong id="cepescola"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>TURNO</span>
+          <strong id="turno"></strong>
+        </div>
+
+
+        <div class="dashboard-item">
+          <span>NECESSIDADE ESPECIAL</span>
+          <strong id="necessidade"></strong>
+        </div>
+
+        <div class="dashboard-item">
+          <span>PONTO DE EMBARQUE</span>
+          <strong id="embarque"></strong>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    async function carregarDadosResponsavel() {
+
+      try {
+
+        // PEGA USERNAME SALVO NO LOGIN
+        const username =
+          localStorage.getItem('username');
+
+        if (!username) {
+
+          alert('Usuário não logado');
+
+          window.location.href = 'index.html';
+
+          return;
         }
 
-        const responsavel =
-            responsavelResult.recordset[0];
+        // CHAMA API
+        const response = await fetch(
+          `http://localhost:3000/responsaveis/dashboard/${username}`
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+
+          alert(result.error);
+
+          return;
+        }
 
         // =========================
-        // BUSCA ALUNO
+        // RESPONSÁVEL
         // =========================
 
-        const alunoResult = await new sql.Request()
-            .input(
-                'ID_Responsavel',
-                sql.Int,
-                responsavel.ID_Responsavel
-            )
-            .query(`
-                SELECT TOP 1
-                    A.ID_Aluno,
-                    A.Nome,
-                    A.Data_Nascimento,
-                    A.Escola,
-                    A.Turno,
-                    A.NecessidadeEspecial,
-                    Ponto_Embarque  = concat(substring(A.Ponto_embarque, 1, charindex(',',A.Ponto_embarque)), ' ', r.numero)
-                FROM Aluno A
-                join responsaveis R on a.ID_Responsavel=r.ID_Responsavel
-                WHERE A.ID_Responsavel = @ID_Responsavel
-            `);
+        document.getElementById('nome')
+          .innerText = result.responsavel.Nome;
 
-        const aluno =
-            alunoResult.recordset.length > 0
-                ? alunoResult.recordset[0]
-                : null;
+        document.getElementById('cpf')
+          .innerText = result.responsavel.CPF;
+
+        document.getElementById('email')
+          .innerText = result.responsavel.Email;
+
+        document.getElementById('telefone1')
+          .innerText = result.responsavel.Contato1;
+
+        document.getElementById('telefone2')
+          .innerText =
+          result.responsavel.Contato2 || '-';
+
+        document.getElementById('endereco')
+          .innerText = result.responsavel.Endereco;
+        
+        document.getElementById('numero')
+          .innerText = result.responsavel.Numero;
+
+        document.getElementById('cep')
+          .innerText = result.responsavel.CEP;
 
         // =========================
-        // RETORNO
+        // ALUNO
         // =========================
 
-        res.json({
-            responsavel,
-            aluno
-        });
+        document.getElementById('aluno')
+          .innerText = result.aluno.Nome;
 
-    } catch (err) {
+        // DATA FORMATADA
+        const nascimento =
+          result.aluno.Data_Nascimento
+            .split('T')[0]
+            .split('-')
+            .reverse()
+            .join('/');
 
-        console.log('ERRO DASHBOARD RESPONSAVEL:', err);
+        document.getElementById('nascimento')
+          .innerText = nascimento;
 
-        res.status(500).json({
-            error: 'Erro ao carregar dashboard',
-            detalhe: err.message
-        });
+        document.getElementById('escola')
+          .innerText = result.aluno.Escola;
+          
+        document.getElementById('cepescola')
+          .innerText = result.aluno.CO_CEP;
+
+        document.getElementById('turno')
+          .innerText = result.aluno.Turno;
+
+        document.getElementById('necessidade')
+          .innerText =
+          result.aluno.NecessidadeEspecial
+            ? 'Sim'
+            : 'Não';
+
+        document.getElementById('embarque')
+          .innerText =
+          result.aluno.Ponto_Embarque;
+
+
+      } catch (err) {
+
+        console.log(err);
+
+        alert('Erro ao carregar dashboard');
+
+      }
+
     }
 
-});
+    carregarDadosResponsavel();
 
-module.exports = router;
+    // LOGOUT
+
+    document
+      .getElementById('logout-btn')
+      .addEventListener('click', () => {
+
+        localStorage.clear();
+
+        window.location.href = 'index.html';
+
+      });
+
+  </script>
+
+</body>
+
+</html>
