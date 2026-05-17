@@ -281,7 +281,7 @@ router.post('/cadastro', async (req, res) => {
             .input('ID_Relacao', sql.Int, idRelacao)
             .input('NecessidadeEspecial', sql.Bit, necessidadeEspecial)
             .input('PontoEmbarque', sql.VarChar, endereco)
-            .input('obs', sql.VarChar, endereco)
+            .input('obs', sql.VarChar, obs)
             .query(`
                 INSERT INTO Aluno
                 (
