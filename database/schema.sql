@@ -112,6 +112,7 @@ CREATE TABLE Responsaveis (
 	Contato3 varchar(20)	null,
     Email VARCHAR(100)NULL,
     Endereco VARCHAR(200)NOT NULL,
+	Numero varchar(50) not null,
     Ativo BIT NOT NULL DEFAULT 1,
     CreatedDate    DATETIME	NOT NULL DEFAULT GETDATE(),
 	
