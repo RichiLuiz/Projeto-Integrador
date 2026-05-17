@@ -19,27 +19,44 @@ Projeto-Integrador/
 │
 
 ├── web/ # Frontend
+
 │ ├── index.html # Página principal
+
 │ ├── cadastro-motorista.html # Página Cadastro Motorista
+
 │ ├── cadastro-responsavel.html # Página Cadastro responsavel
+
 │ ├── motorista-dashboard.html
+
 │ ├── responsavel-dashboard.html
+
 │ ├── login.js
+
 │ ├── main.js
+
 │ ├── motorista.js
+
 │ ├── responsavel.js
+
 │ ├── style.css
 │
 
 └── api/ # Backend
+
 │ ├── server.js
+
 │ ├──db.js
 
 ├── routes/ # Rotas da API
+
 │ ├── auth.js
+
 │ ├── motoristas.js
+
 │ ├── motoristaDashboard.js
+
 │ ├── responsaveis.js
+
 │ ├── responsaveisDashboard.js
 
 
