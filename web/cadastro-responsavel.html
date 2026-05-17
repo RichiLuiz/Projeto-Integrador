@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Responsável — VanEscolar</title>
+  <link rel="stylesheet" href="../FrontEnd/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body class="form-page">
+
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="../FrontEnd/index.html" style="text-decoration:none;display:flex;align-items:center;gap:10px;color:inherit">
+        <span class="brand-icon">🚐</span>
+        <span class="brand-name">VanConecta - Para Responsáveis</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="../FrontEnd/index.html">← Voltar</a>
+    </div>
+  </nav>
+
+  <div class="form-main">
+    <div class="form-sidebar">
+      <h2>Cadastre-se com segurança</h2>
+      <p>Registre seus dados como responsável e do aluno. Encontre motoristas verificados na sua região.</p>
+      <ul class="sidebar-features">
+        <li><span class="feature-check">✓</span> Encontre Motoristas verificados</li>
+        <li><span class="feature-check">✓</span> Acompanhe o transporte</li>
+        <li><span class="feature-check">✓</span> Histórico de viagens</li>
+      </ul>
+    </div>
+
+    <div class="form-container">
+      <h3>Criar conta — Responsável</h3>
+      <p>Todos os campos marcados com * são obrigatórios</p>
+
+
+      <form id="form-responsavel" novalidate>
+
+        <div class="form-section-title">Dados do responsável</div>
+
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nome">Nome completo *</label>
+            <input type="text" id="nome" name="nome" placeholder="Maria Oliveira" required>
+          </div>
+          <div class="form-group">
+            <label for="cpf">CPF *</label>
+            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">E-mail *</label>
+            <input type="email" id="email" name="email" placeholder="maria@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="telefone">Telefone / WhatsApp *</label>
+            <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" maxlength="15" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="relacao">Relação com o aluno *</label>
+            <select id="relacao" name="relacao" required>
+              <option value="">Selecione...</option>
+              <option value="pai">Pai</option>
+              <option value="mae">Mãe</option>
+              <option value="avo">Avô / Avó</option>
+              <option value="tutor">Tutor legal</option>
+              <option value="outro">Outro responsável</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="tel-emergencia">Tel. de emergência</label>
+            <input type="tel" id="tel-emergencia" name="tel-emergencia" placeholder="(11) 99999-9999" maxlength="15">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="user">Usuário *</label>
+            <input type="text" id="user" name="user" placeholder="Escolha seu usuário" minlength="8" required>
+          </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="senha">Senha *</label>
+            <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres" minlength="8" required>
+          </div>
+          <div class="form-group">
+            <label for="senha-conf">Confirmar senha *</label>
+            <input type="password" id="senha-conf" name="senha-conf" placeholder="Repita a senha" required>
+          </div>
+        </div>
+        <br>
+        </div>
+        <div class="form-section-title">Dados do aluno</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="aluno-nome">Nome do aluno *</label>
+            <input type="text" id="aluno-nome" name="aluno-nome" placeholder="Pedro Oliveira" required>
+          </div>
+          <div class="form-group">
+            <label for="aluno-nasc">Data de nascimento *</label>
+            <input type="date" id="aluno-nasc" name="aluno-nasc" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="escola">Escola *</label>
+            <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+          </div>
+          <div class="form-group">
+            <label for="turno">Turno *</label>
+            <select id="turno" name="turno" required>
+              <option value="">Selecione...</option>
+              <option value="manha">Manhã</option>
+              <option value="tarde">Tarde</option>
+              <option value="noite">Noite</option>
+              <option value="integral">Integral</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="endereco">Endereço de embarque *</label>
+          <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade" required>
+        </div>
+        <div class="form-group">
+      <label>Possui necessidade especial?</label>
+
+      <select id="necessidades" required>
+          <option value="">Selecione</option>
+          <option value="sim">Sim</option>
+          <option value="nao">Não</option>
+        </select>
+        </div>
+        <div class="form-group">
+          <label for="obs">Necessidades especiais ou observações</label>
+          <textarea id="obs" name="obs" placeholder="Informe alergias, necessidades de acessibilidade ou qualquer informação relevante para o motorista."></textarea>
+        </div>
+
+        <br>
+        <button type="submit" class="btn btn--primary btn--full">
+          <span>Criar minha conta</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <p class="form-footer-note">
+          É motorista de van? <a href="cadastro-motorista.html">Cadastre-se aqui</a>
+        </p>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="../FrontEnd/main.js"></script>
+  
+
+  <!-- Envio das informações para o backend -->
+  <script>
+    document.getElementById('form-responsavel')
+.addEventListener('submit', async function(e) {
+
+    e.preventDefault();
+
+    const dados = {
+        nome: document.getElementById('nome').value,
+        cpf: document.getElementById('cpf').value,
+        telefone: document.getElementById('telefone').value,
+        email: document.getElementById('email').value,
+        endereco: document.getElementById('endereco').value,
+        tel2: document.getElementById('tel-emergencia').value,
+        relacao: document.getElementById('relacao').value,
+        user: document.getElementById('user').value,
+        senha: document.getElementById('senha').value,
+        aluno: document.getElementById('aluno-nome').value,
+        nasc: document.getElementById('aluno-nasc').value,
+        escola: document.getElementById('escola').value,
+        turno: document.getElementById('turno').value,
+        obs: document.getElementById('obs').value,
+        necessidades: document.getElementById('necessidades').value
+    };
+
+    try {
+
+    const response = await fetch('http://localhost:3000/responsaveis/cadastro', {
+        
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dados)
+            }
+        );
+
+        const result = await response.json();
+
+        console.log(result);
+
+        if (response.ok) {
+
+    alert(result.message);
+
+} else {
+
+    alert(result.error);
+}
+
+    } catch(err) {
+
+        console.log(err);
+
+        alert('Erro ao conectar com API');
+    }
+});
+  </script>
+</body>
+</html>

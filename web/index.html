@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VanConecta — Transporte seguro para seu filho</title>
+  
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body class="home-page">
+
+  <nav class="navbar">
+    <div class="nav-brand">
+      <h1>VanConecta — Seu filho chega em segurança Sempre!</h1>
+      <!-- VERMELHO: subiu um pouco (agora está logo abaixo do título principal) -->
+      <p class="hero-sub">Conectamos motoristas de transporte escolar à famílias. Cadastre-se e encontre o transporte ideal para seu filho — ou gerencie seus passageiros com facilidade.</p>
+    </div>
+  </nav>
+
+  <!-- Título "Simples para todos!" em AZUL: desceu para depois do vermelho -->
+  <h2 class="titulo-simples">✨ Simples para todos! ✨</h2>
+  <div class="container-cards">
+        
+    <div class="steps">
+
+<div class="step step--login">
+  <h3>Login</h3>
+  <div class="step-icon">🔐</div>
+
+  <form class="login-form" id="login-form">
+    <div class="form-group">
+      <input type="text" id="login-user" placeholder="Usuário" required>
+    </div>
+
+    <div class="form-group">
+      <input type="password" id="login-password" placeholder="Senha" required>
+    </div>
+      <button type="submit" class="step-link">
+  Entrar →
+</button>
+    </form>
+</div>
+      <div class="step-divider">
+        <div class="divider-line"></div>
+        <div class="divider-line"></div>
+        <div class="divider-line"></div>
+        <div class="divider-line"></div>
+        <div class="divider-line"></div>
+        <div class="divider-line"></div>
+        <div class="divider-line"></div>
+        
+      </div>
+      <div class="step step--driver">
+        <h3>Motorista</h3>
+        <div class="footer-brand">🚐</div>
+        <p>Cadastre-se, informe os dados da sua van, rotas e disponibilidade. Gerencie seus passageiros em um só lugar.</p>
+        <a href="cadastro-motorista.html" class="step-link">Cadastrar van →</a>
+      </div>
+      <div class="step-divider">
+        <div class="divider-line"></div>
+        <div class="divider-line"></div>
+        <div class="divider-line"></div>
+      </div>
+      <div class="step step--parent">
+        <h3>Responsável</h3>
+        <div class="step-icon">👨‍👩‍👧</div>
+        <p>Cadastre-se e registre os dados do seu filho. Acompanhe o transporte e tenha mais tranquilidade no dia a dia.</p>
+        <a href="cadastro-responsavel.html" class="step-link">Cadastrar filho →</a>
+      </div>
+    </div>
+    </div>
+    </div>
+    
+  <footer class="footer">
+    <p>🚌 Projeto acadêmico — Transporte escolar 🚸</p>
+  </footer>
+
+  <script src="main.js"></script>
+
+<script>
+
+document
+.getElementById('login-form')
+.addEventListener('submit', async (e) => {
+
+    e.preventDefault();
+
+    const username =
+        document.getElementById('login-user').value;
+
+    const password =
+        document.getElementById('login-password').value;
+
+    try {
+
+        const response = await fetch(
+            'http://localhost:3000/auth/login',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+
+            alert(result.error);
+            return;
+        }
+
+        // salva username
+        localStorage.setItem(
+            'username',
+            username
+        );
+
+        // ROLE MOTORISTA
+        if (result.role === 'Motorista') {
+
+            window.location.href =
+            './motorista-dashboard.html';
+        }
+
+        // ROLE RESPONSAVEL
+        else if (result.role === 'Responsavel') {
+
+    localStorage.setItem(
+        'username',
+        username
+    );
+
+    window.location.href =
+    './responsavel-dashboard.html';
+}
+
+    } catch (err) {
+
+        console.log(err);
+
+        alert('Erro ao conectar com API');
+    }
+
+});
+
+</script>
+
+</body>
+</html>
