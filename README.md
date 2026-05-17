@@ -13,51 +13,53 @@ Projeto-Integrador/
 
 ├── database/
 
-│ ├── schema.sql # Estrutura do banco de dados
+│   ├── schema.sql # Estrutura do banco de dados
 
-│ ├── seeds.sql # Dados iniciais/exemplo
+│   ├── seeds.sql # Dados iniciais/exemplo
+
 │
 
 ├── web/ # Frontend
 
-│ ├── index.html # Página principal
+│    ├── index.html # Página principal
 
-│ ├── cadastro-motorista.html # Página Cadastro Motorista
+│    ├── cadastro-motorista.html # Página Cadastro Motorista
 
-│ ├── cadastro-responsavel.html # Página Cadastro responsavel
+│    ├── cadastro-responsavel.html # Página Cadastro responsavel
 
-│ ├── motorista-dashboard.html
+│    ├── motorista-dashboard.html
 
-│ ├── responsavel-dashboard.html
+│    ├── responsavel-dashboard.html
 
-│ ├── login.js
+│    ├── login.js
 
-│ ├── main.js
+│    ├── main.js
 
-│ ├── motorista.js
+│    ├── motorista.js
 
-│ ├── responsavel.js
+│    ├── responsavel.js
 
-│ ├── style.css
+│    ├── style.css
+
 │
 
 ├── api/ # Backend
 
-│ ├── server.js
+│   ├── server.js
 
-│ ├──db.js
+│   ├──db.js
 
-└── routes/ # Rotas da API
+│   └── routes/ # Rotas da API
 
-│ ├── auth.js
+│   │   ├── auth.js
 
-│ ├── motoristas.js
+│   │   ├── motoristas.js
 
-│ ├── motoristaDashboard.js
+│   │   ├── motoristaDashboard.js
 
-│ ├── responsaveis.js
+│   │   ├── responsaveis.js
 
-│ ├── responsaveisDashboard.js
+│   │   ├── responsaveisDashboard.js
 
 
 
