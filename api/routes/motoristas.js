@@ -34,7 +34,7 @@ router.post('/cadastro', async (req, res) => {
         } = req.body;
 
         // =========================
-        // VALIDAÇÕES
+        // VALIDAÇÕES.
         // =========================
 
         // LOGIN
@@ -96,6 +96,7 @@ router.post('/cadastro', async (req, res) => {
         }
 
         // CAPACIDADE
+        ================
         if (!capacidade || capacidade <= 0) {
 
             return res.status(400).json({
