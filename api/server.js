@@ -4,22 +4,22 @@ const cors = require('cors');
 const { connectDB } = require('./api/db');
 
 const motoristasRoutes =
-require('./routes/motoristas');
+    require('./api/routes/motoristas');
 
 const responsaveisRoutes =
-require('./routes/responsaveis');
+    require('./api/routes/responsaveis');
 
 const authRoutes =
-require('./routes/auth');
+    require('./api/routes/auth');
 
 const motoristaDashboardRoutes =
-require('./routes/motoristaDashboard');
+    require('./api/routes/motoristaDashboard');
 
 const responsavelDashboardRoutes =
-require('./routes/responsaveisDashboard');
+    require('./api/routes/responsaveisDashboard');
 
 const escolasRoutes =
-require('./routes/escolas');
+    require('./api/routes/escolas');
 
 const app = express();
 
@@ -40,7 +40,6 @@ app.use('/auth', authRoutes);
 
 app.use('/escolas', escolasRoutes);
 
-
 // DASHBOARDS
 
 app.use(
@@ -48,12 +47,13 @@ app.use(
     motoristaDashboardRoutes
 );
 
-app.use('/responsaveis', responsavelDashboardRoutes);
-
+app.use(
+    '/responsaveis',
+    responsavelDashboardRoutes
+);
 
 // =========================
 
 app.listen(3000, () => {
-
     console.log('API rodando na porta 3000');
 });
