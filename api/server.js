@@ -1,25 +1,25 @@
 const express = require('express');
 const cors = require('cors');
 
-const { connectDB } = require('./api/db');
+const { connectDB } = require('./db');
 
 const motoristasRoutes =
-    require('./api/routes/motoristas');
+    require('./routes/motoristas');
 
 const responsaveisRoutes =
-    require('./api/routes/responsaveis');
+    require('./routes/responsaveis');
 
 const authRoutes =
-    require('./api/routes/auth');
+    require('./routes/auth');
 
 const motoristaDashboardRoutes =
-    require('./api/routes/motoristaDashboard');
+    require('./routes/motoristaDashboard');
 
 const responsavelDashboardRoutes =
-    require('./api/routes/responsaveisDashboard');
+    require('./routes/responsaveisDashboard');
 
 const escolasRoutes =
-    require('./api/routes/escolas');
+    require('./routes/escolas');
 
 const app = express();
 
