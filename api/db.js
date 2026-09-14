@@ -1,4 +1,4 @@
-const sql = require('pg');
+const { Pool } = require('pg');
 
 const config = {
     user: 'API_VanConecta',
