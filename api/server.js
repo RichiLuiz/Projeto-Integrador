@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-const { connectDB } = require('./db');
+const { connectDB } = require('./api/db');
 
 const motoristasRoutes =
 require('./routes/motoristas');
