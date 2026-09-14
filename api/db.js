@@ -1,29 +1,23 @@
 const { Pool } = require('pg');
 
-const config = {
-    user: 'API_VanConecta',
-    password: 'Van@123456',
-    server: 'localhost',
-
-    port: 1433,
-
-    database: 'VanConecta',
-    options: {
-        encrypt: false,
-        trustServerCertificate: true
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
     }
-};
+});
 
 async function connectDB() {
     try {
-        await sql.connect(config);
-        console.log('Conectado ao SQL Server');
+        const client = await pool.connect();
+        console.log('Conectado ao PostgreSQL/Supabase');
+        client.release();
     } catch (err) {
-        console.log(err);
+        console.error('Erro ao conectar ao PostgreSQL/Supabase:', err);
     }
 }
 
 module.exports = {
-    sql,
+    pool,
     connectDB
 };
