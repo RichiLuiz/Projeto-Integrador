@@ -205,10 +205,11 @@
         }
 
         // FETCH API
+        //const response = await fetch(
+        //  `http://localhost:3000/motoristas/dashboard/${username}`
+        //);
         const response = await fetch(
-          `http://localhost:3000/motoristas/dashboard/${username}`
-        );
-
+          '/auth/login' );
         const result = await response.json();
 
         if (!response.ok) {
@@ -224,33 +225,33 @@
 
         document.getElementById('nome')
           .innerText =
-          result.motorista.NomeMotorista || '-';
+          result.motorista.nomemotorista || '-';
 
         document.getElementById('cpf')
           .innerText =
-          result.motorista.CPF || '-';
+          result.motorista.cpf || '-';
 
         document.getElementById('email')
           .innerText =
-          result.motorista.Email || '-';
+          result.motorista.email || '-';
 
         document.getElementById('telefone')
           .innerText =
-          result.motorista.Contato1 || '-';
+          result.motorista.contato1 || '-';
 
         document.getElementById('cnh')
           .innerText =
-          result.motorista.CNH || '-';
+          result.motorista.cnh || '-';
 
         document.getElementById('categoria')
           .innerText =
-          result.motorista.Categoria_CNH || '-';
+          result.motorista.categoria_cnh || '-';
 
         // DATA VALIDADE CNH
-        if (result.motorista.Validade_CNH) {
+        if (result.motorista.validade_cnh) {
 
           const validadeCNH =
-            result.motorista.Validade_CNH
+            result.motorista.validade_cnh
               .split('T')[0]
               .split('-')
               .reverse()
@@ -262,7 +263,7 @@
 
         document.getElementById('experiencia')
           .innerText =
-          (result.motorista.TempoExperiencia || 0)
+          (result.motorista.tempoexperiencia || 0)
           + ' anos';
 
         // =========================
@@ -273,17 +274,17 @@
 
           document.getElementById('placa')
             .innerText =
-            result.veiculo.Placa || '-';
+            result.veiculo.placa || '-';
 
           document.getElementById('modelo')
             .innerText =
-            result.veiculo.Modelo || '-';
+            result.veiculo.modelo || '-';
 
           // ANO VEÍCULO
-          if (result.veiculo.Ano_Veiculo) {
+          if (result.veiculo.ano_veiculo) {
 
             const anoVeiculo =
-              result.veiculo.Ano_Veiculo
+              result.veiculo.ano_veiculo
                 .split('T')[0]
                 .split('-')[0];
 
@@ -293,11 +294,11 @@
 
           document.getElementById('capacidade')
             .innerText =
-            result.veiculo.Capacidade || '-';
+            result.veiculo.capacidade || '-';
 
           document.getElementById('regiao')
             .innerText =
-            result.veiculo.Regiao || '-';
+            result.veiculo.regiao || '-';
 
           document.getElementById('obs')
             .innerText =
