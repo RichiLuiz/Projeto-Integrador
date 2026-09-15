@@ -23,14 +23,14 @@ router.post('/login', async (req, res) => {
         // PostgreSQL utiliza $1, $2, etc.
         const result = await pool.query(`
             SELECT
-                U."UserID",
-                U."Username",
-                U."PasswordHash",
-                R."RoleName"
-            FROM "Users" U
-            INNER JOIN "Roles" R
-                ON U."RoleID" = R."RoleID"
-            WHERE U."Username" = $1
+                U."userID",
+                U."username",
+                U."passwordHash",
+                R."roleName"
+            FROM "users" U
+            INNER JOIN "roles" R
+                ON U."roleID" = R."roleID"
+            WHERE U."username" = $1
         `, [username]);
 
         // Usuário não encontrado
