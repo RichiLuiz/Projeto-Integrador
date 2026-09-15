@@ -357,7 +357,7 @@ router.post('/cadastro', async (req, res) => {
                 placaLimpa,
                 capacidade,
                 modelo,
-                ano,
+                 `${ano}-01-01`,
                 regiao,
                 obs
             ]
