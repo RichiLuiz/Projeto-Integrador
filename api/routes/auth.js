@@ -13,24 +13,23 @@ router.post('/login', async (req, res) => {
             password
         } = req.body;
 
-        // Validação básica
+        // Validação
         if (!username || !password) {
             return res.status(400).json({
                 error: 'Usuário e senha são obrigatórios'
             });
         }
 
-        // PostgreSQL utiliza $1, $2, etc.
         const result = await pool.query(`
             SELECT
-                U."userID",
-                U."username",
-                U."passwordHash",
-                R."roleName"
-            FROM "users" U
-            INNER JOIN "roles" R
-                ON U."roleID" = R."roleID"
-            WHERE U."username" = $1
+                U.userid,
+                U.username,
+                U.passwordhash,
+                R.rolename
+            FROM users U
+            INNER JOIN roles R
+                ON U.roleid = R.roleid
+            WHERE U.username = $1
         `, [username]);
 
         // Usuário não encontrado
@@ -43,10 +42,10 @@ router.post('/login', async (req, res) => {
 
         const user = result.rows[0];
 
-        // Valida senha usando bcrypt
+        // Validação da senha
         const senhaValida = await bcrypt.compare(
             password,
-            user.PasswordHash
+            user.passwordhash
         );
 
         if (!senhaValida) {
@@ -59,9 +58,9 @@ router.post('/login', async (req, res) => {
         // Login realizado
         res.json({
             message: 'Login realizado',
-            role: user.RoleName,
-            userId: user.UserID,
-            username: user.Username
+            role: user.rolename,
+            userId: user.userid,
+            username: user.username
         });
 
     } catch (err) {
