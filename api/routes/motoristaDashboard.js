@@ -11,14 +11,14 @@ router.get('/dashboard/:username', async (req, res) => {
 
         const motoristaResult =
             await new sql.Request()
-                .input('Username', sql.VarChar, username)
+                .input('username', sql.VarChar, username)
                 .query(`
                     SELECT
                         M.*
-                    FROM Users U
-                    INNER JOIN Motoristas M
-                        ON U.UserID = M.UserID
-                    WHERE U.Username = @Username
+                    FROM users U
+                    INNER JOIN motoristas M
+                        ON U.userID = M.userID
+                    WHERE U.username = @Username
                 `);
 
         if (motoristaResult.recordset.length === 0) {
@@ -34,14 +34,14 @@ router.get('/dashboard/:username', async (req, res) => {
         const veiculoResult =
             await new sql.Request()
                 .input(
-                    'ID_Motorista',
+                    'id_motorista',
                     sql.Int,
-                    motorista.ID_Motorista
+                    motorista.id_motorista
                 )
                 .query(`
                     SELECT TOP 1 *
-                    FROM Veiculos
-                    WHERE ID_Motorista = @ID_Motorista
+                    FROM veiculos
+                    WHERE id_motorista = @ID_Motorista
                 `);
 
         const veiculo =
