@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { sql } = require('../db');
-
+const { pool } = require('../db');
 const bcrypt = require('bcrypt');
 
 router.post('/login', async (req, res) => {
@@ -14,34 +13,41 @@ router.post('/login', async (req, res) => {
             password
         } = req.body;
 
-        const result = await new sql.Request()
-            .input('Username', sql.VarChar, username)
-            .query(`
-                SELECT
-                    U.UserID,
-                    U.Username,
-                    U.PasswordHash,
-                    R.RoleName
-                FROM Users U
-                INNER JOIN Roles R
-                    ON U.RoleID = R.RoleID
-                WHERE U.Username = @Username
-            `);
+        // Validação básica
+        if (!username || !password) {
+            return res.status(400).json({
+                error: 'Usuário e senha são obrigatórios'
+            });
+        }
 
-        if (result.recordset.length === 0) {
+        // PostgreSQL utiliza $1, $2, etc.
+        const result = await pool.query(`
+            SELECT
+                U."UserID",
+                U."Username",
+                U."PasswordHash",
+                R."RoleName"
+            FROM "Users" U
+            INNER JOIN "Roles" R
+                ON U."RoleID" = R."RoleID"
+            WHERE U."Username" = $1
+        `, [username]);
+
+        // Usuário não encontrado
+        if (result.rows.length === 0) {
 
             return res.status(400).json({
                 error: 'Usuário não encontrado'
             });
         }
 
-        const user = result.recordset[0];
+        const user = result.rows[0];
 
-        const senhaValida =
-            await bcrypt.compare(
-                password,
-                user.PasswordHash
-            );
+        // Valida senha usando bcrypt
+        const senhaValida = await bcrypt.compare(
+            password,
+            user.PasswordHash
+        );
 
         if (!senhaValida) {
 
@@ -50,15 +56,17 @@ router.post('/login', async (req, res) => {
             });
         }
 
+        // Login realizado
         res.json({
             message: 'Login realizado',
             role: user.RoleName,
-            userId: user.UserID
+            userId: user.UserID,
+            username: user.Username
         });
 
     } catch (err) {
 
-        console.log(err);
+        console.error('Erro no login:', err);
 
         res.status(500).json({
             error: 'Erro no login'
