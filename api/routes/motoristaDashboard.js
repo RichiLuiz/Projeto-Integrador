@@ -17,7 +17,7 @@ router.get('/dashboard/:username', async (req, res) => {
                         M.*
                     FROM users U
                     INNER JOIN motoristas M
-                        ON U.userID = M.userID
+                        ON U.userid = M.userid
                     WHERE U.username = @Username
                 `);
 
@@ -35,7 +35,7 @@ router.get('/dashboard/:username', async (req, res) => {
             await new sql.Request()
                 .input(
                     'id_motorista',
-                    sql.Int,
+                    sql.int,
                     motorista.id_motorista
                 )
                 .query(`
