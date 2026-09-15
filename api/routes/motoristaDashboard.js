@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { sql } = require('../db');
+const { pool } = require('../db');
 
 router.get('/dashboard/:username', async (req, res) => {
 
@@ -9,19 +9,20 @@ router.get('/dashboard/:username', async (req, res) => {
 
         const { username } = req.params;
 
-        const motoristaResult =
-            await new sql.Request()
-                .input('username', sql.VarChar, username)
-                .query(`
-                    SELECT
-                        M.*
-                    FROM users U
-                    INNER JOIN motoristas M
-                        ON U.userid = M.userid
-                    WHERE U.username = @Username
-                `);
+        // =========================
+        // BUSCAR MOTORISTA
+        // =========================
 
-        if (motoristaResult.recordset.length === 0) {
+        const motoristaResult = await pool.query(`
+            SELECT
+                M.*
+            FROM users U
+            INNER JOIN motoristas M
+                ON U.userid = M.userid
+            WHERE U.username = $1
+        `, [username]);
+
+        if (motoristaResult.rows.length === 0) {
 
             return res.status(404).json({
                 error: 'Motorista não encontrado'
@@ -29,23 +30,27 @@ router.get('/dashboard/:username', async (req, res) => {
         }
 
         const motorista =
-            motoristaResult.recordset[0];
+            motoristaResult.rows[0];
 
-        const veiculoResult =
-            await new sql.Request()
-                .input(
-                    'id_motorista',
-                    sql.int,
-                    motorista.id_motorista
-                )
-                .query(`
-                    SELECT TOP 1 *
-                    FROM veiculos
-                    WHERE id_motorista = @ID_Motorista
-                `);
+
+        // =========================
+        // BUSCAR VEÍCULO
+        // =========================
+
+        const veiculoResult = await pool.query(`
+            SELECT *
+            FROM veiculos
+            WHERE id_motorista = $1
+            LIMIT 1
+        `, [motorista.id_motorista]);
 
         const veiculo =
-            veiculoResult.recordset[0] || null;
+            veiculoResult.rows[0] || null;
+
+
+        // =========================
+        // RETORNO
+        // =========================
 
         res.json({
             motorista,
@@ -54,7 +59,10 @@ router.get('/dashboard/:username', async (req, res) => {
 
     } catch (err) {
 
-        console.log(err);
+        console.error(
+            'Erro ao carregar dashboard do motorista:',
+            err
+        );
 
         res.status(500).json({
             error: 'Erro ao carregar dashboard'
