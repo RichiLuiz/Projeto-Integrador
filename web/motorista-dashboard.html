@@ -205,17 +205,17 @@
         }
 
         // FETCH API
-        //const response = await fetch(
-        //  `http://localhost:3000/motoristas/dashboard/${username}`
-        //);
+        
         const response = await fetch(
-          '/auth/login' );
+          `/motoristas/dashboard/${encodeURIComponent(username)}`
+        );
+              
         const result = await response.json();
-
+              
         if (!response.ok) {
-
-          alert(result.error);
-
+        
+          alert(result.error || 'Erro ao carregar dados do motorista');
+        
           return;
         }
 
