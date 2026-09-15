@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const { sql } = require('../db');
+const { pool } = require('../db');
 const { v4: uuidv4 } = require('uuid');
 
 const { cpf } = require('cpf-cnpj-validator');
 
 router.post('/cadastro', async (req, res) => {
 
-    const transaction = new sql.Transaction();
+    const client = await pool.connect();
     const bcrypt = require('bcrypt');
+
     try {
 
         const {
@@ -22,7 +23,6 @@ router.post('/cadastro', async (req, res) => {
             validade_cnh,
             anos_exp,
             user,
-
             placa,
             capacidade,
             obs,
@@ -47,7 +47,7 @@ router.post('/cadastro', async (req, res) => {
 
         // SENHA
         if (!senha || senha.length < 8) {
-        
+
             return res.status(400).json({
                 error: 'Senha deve possuir no mínimo 8 caracteres'
             });
@@ -116,15 +116,16 @@ router.post('/cadastro', async (req, res) => {
         // VERIFICA LOGIN
         // =========================
 
-        const loginExiste = await new sql.Request()
-            .input('Username', sql.VarChar, user)
-            .query(`
+        const loginExiste = await client.query(
+            `
                 SELECT UserID
                 FROM Users
-                WHERE Username = @Username
-            `);
+                WHERE Username = $1
+            `,
+            [user]
+        );
 
-        if (loginExiste.recordset.length > 0) {
+        if (loginExiste.rows.length > 0) {
 
             return res.status(400).json({
                 error: 'Login já cadastrado'
@@ -135,15 +136,16 @@ router.post('/cadastro', async (req, res) => {
         // VERIFICA EMAIL
         // =========================
 
-        const emailExiste = await new sql.Request()
-            .input('Email', sql.VarChar, email)
-            .query(`
+        const emailExiste = await client.query(
+            `
                 SELECT UserID
                 FROM Motoristas
-                WHERE Email = @Email
-            `);
+                WHERE Email = $1
+            `,
+            [email]
+        );
 
-        if (emailExiste.recordset.length > 0) {
+        if (emailExiste.rows.length > 0) {
 
             return res.status(400).json({
                 error: 'Email já cadastrado'
@@ -154,15 +156,16 @@ router.post('/cadastro', async (req, res) => {
         // VERIFICA CPF
         // =========================
 
-        const cpfExiste = await new sql.Request()
-            .input('CPF', sql.VarChar, cpfRecebido)
-            .query(`
+        const cpfExiste = await client.query(
+            `
                 SELECT UserID
                 FROM Motoristas
-                WHERE CPF = @CPF
-            `);
+                WHERE CPF = $1
+            `,
+            [cpfRecebido]
+        );
 
-        if (cpfExiste.recordset.length > 0) {
+        if (cpfExiste.rows.length > 0) {
 
             return res.status(400).json({
                 error: 'CPF já cadastrado'
@@ -173,15 +176,16 @@ router.post('/cadastro', async (req, res) => {
         // VERIFICA CNH
         // =========================
 
-        const cnhExiste = await new sql.Request()
-            .input('CNH', sql.VarChar, somenteNumerosCNH)
-            .query(`
+        const cnhExiste = await client.query(
+            `
                 SELECT UserID
                 FROM Motoristas
-                WHERE CNH = @CNH
-            `);
+                WHERE CNH = $1
+            `,
+            [somenteNumerosCNH]
+        );
 
-        if (cnhExiste.recordset.length > 0) {
+        if (cnhExiste.rows.length > 0) {
 
             return res.status(400).json({
                 error: 'CNH já cadastrada'
@@ -192,15 +196,16 @@ router.post('/cadastro', async (req, res) => {
         // VERIFICA PLACA
         // =========================
 
-        const placaExiste = await new sql.Request()
-            .input('Placa', sql.VarChar, placaLimpa)
-            .query(`
+        const placaExiste = await client.query(
+            `
                 SELECT ID_Veiculo
                 FROM Veiculos
-                WHERE Placa = @Placa
-            `);
+                WHERE Placa = $1
+            `,
+            [placaLimpa]
+        );
 
-        if (placaExiste.recordset.length > 0) {
+        if (placaExiste.rows.length > 0) {
 
             return res.status(400).json({
                 error: 'Placa já cadastrada'
@@ -211,21 +216,23 @@ router.post('/cadastro', async (req, res) => {
         // BUSCA ROLE
         // =========================
 
-        const roleResult = await new sql.Request()
-            .query(`
-                SELECT TOP 1 RoleID
+        const roleResult = await client.query(
+            `
+                SELECT RoleID
                 FROM Roles
                 WHERE RoleName = 'Motorista'
-            `);
+                LIMIT 1
+            `
+        );
 
-        if (roleResult.recordset.length === 0) {
+        if (roleResult.rows.length === 0) {
 
             return res.status(400).json({
                 error: 'Role Motorista não encontrada'
             });
         }
 
-        const roleId = roleResult.recordset[0].RoleID;
+        const roleId = roleResult.rows[0].roleid;
 
         const userId = uuidv4();
 
@@ -233,22 +240,16 @@ router.post('/cadastro', async (req, res) => {
         // INICIA TRANSACTION
         // =========================
 
-        await transaction.begin();
+        await client.query('BEGIN');
 
-        const requestUser = new sql.Request(transaction);
-        const requestMotorista = new sql.Request(transaction);
-        const requestVeiculo = new sql.Request(transaction);
         const senhaHash = await bcrypt.hash(senha, 10);
+
         // =========================
         // INSERT USERS
         // =========================
 
-        await requestUser
-            .input('UserID', sql.UniqueIdentifier, userId)
-            .input('Username', sql.VarChar, user)
-            .input('RoleID', sql.UniqueIdentifier, roleId)
-            .input('PasswordHash', sql.VarChar, senhaHash)
-            .query(`
+        await client.query(
+            `
                 INSERT INTO Users
                 (
                     UserID,
@@ -258,28 +259,26 @@ router.post('/cadastro', async (req, res) => {
                 )
                 VALUES
                 (
-                    @UserID,
-                    @Username,
-                    @RoleID,
-                    @PasswordHash
+                    $1,
+                    $2,
+                    $3,
+                    $4
                 )
-            `);
+            `,
+            [
+                userId,
+                user,
+                roleId,
+                senhaHash
+            ]
+        );
 
         // =========================
         // INSERT MOTORISTA
         // =========================
 
-        const motoristaResult = await requestMotorista
-            .input('NomeMotorista', sql.VarChar, nome)
-            .input('CPF', sql.VarChar, cpfRecebido)
-            .input('Contato1', sql.VarChar, telefone)
-            .input('CNH', sql.VarChar, somenteNumerosCNH)
-            .input('Categoria_CNH', sql.VarChar, categoria_cnh)
-            .input('Validade_CNH', sql.Date, validade_cnh)
-            .input('Email', sql.VarChar, email)
-            .input('TempoExperiencia', sql.Int, anos_exp)
-            .input('UserID', sql.UniqueIdentifier, userId)
-            .query(`
+        const motoristaResult = await client.query(
+            `
                 INSERT INTO Motoristas
                 (
                     UserID,
@@ -292,43 +291,46 @@ router.post('/cadastro', async (req, res) => {
                     Email,
                     TempoExperiencia
                 )
-
-                OUTPUT INSERTED.ID_Motorista
-
                 VALUES
                 (
-                    @UserID,
-                    @NomeMotorista,
-                    @CPF,
-                    @Contato1,
-                    @CNH,
-                    @Categoria_CNH,
-                    @Validade_CNH,
-                    @Email,
-                    @TempoExperiencia
+                    $1,
+                    $2,
+                    $3,
+                    $4,
+                    $5,
+                    $6,
+                    $7,
+                    $8,
+                    $9
                 )
-            `);
+                RETURNING ID_Motorista
+            `,
+            [
+                userId,
+                nome,
+                cpfRecebido,
+                telefone,
+                somenteNumerosCNH,
+                categoria_cnh,
+                validade_cnh,
+                email,
+                anos_exp
+            ]
+        );
 
         // =========================
         // PEGA ID MOTORISTA
         // =========================
 
         const idMotorista =
-            motoristaResult.recordset[0].ID_Motorista;
+            motoristaResult.rows[0].id_motorista;
 
         // =========================
         // INSERT VEICULO
         // =========================
 
-        await requestVeiculo
-            .input('ID_Motorista', sql.Int, idMotorista)
-            .input('Placa', sql.VarChar, placaLimpa)
-            .input('Capacidade', sql.Int, capacidade)
-            .input('Modelo', sql.VarChar, modelo)
-            .input('Ano', sql.DateTime, ano)
-            .input('Regiao', sql.VarChar, regiao)
-            .input('obs', sql.VarChar, obs)
-            .query(`
+        await client.query(
+            `
                 INSERT INTO Veiculos
                 (
                     ID_Motorista,
@@ -341,21 +343,31 @@ router.post('/cadastro', async (req, res) => {
                 )
                 VALUES
                 (
-                    @ID_Motorista,
-                    @Placa,
-                    @Capacidade,
-                    @Modelo,
-                    @Ano,
-                    @Regiao,
-                    @obs
+                    $1,
+                    $2,
+                    $3,
+                    $4,
+                    $5,
+                    $6,
+                    $7
                 )
-            `);
+            `,
+            [
+                idMotorista,
+                placaLimpa,
+                capacidade,
+                modelo,
+                ano,
+                regiao,
+                obs
+            ]
+        );
 
         // =========================
         // COMMIT
         // =========================
 
-        await transaction.commit();
+        await client.query('COMMIT');
 
         res.status(201).json({
             message: 'Motorista cadastrado com sucesso'
@@ -370,13 +382,18 @@ router.post('/cadastro', async (req, res) => {
         // =========================
 
         try {
-            await transaction.rollback();
+            await client.query('ROLLBACK');
         } catch {}
 
         res.status(500).json({
             error: 'Erro no cadastro',
             detalhe: err.message
         });
+
+    } finally {
+
+        client.release();
+
     }
 });
 
