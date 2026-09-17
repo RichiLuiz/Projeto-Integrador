@@ -128,7 +128,7 @@ router.post('/cadastro', async (req, res) => {
         if (loginExiste.rows.length > 0) {
 
             return res.status(400).json({
-                error: 'Login já cadastrado'
+                error: 'Login de usuário já cadastrado, favor escolher outro'
             });
         }
 
