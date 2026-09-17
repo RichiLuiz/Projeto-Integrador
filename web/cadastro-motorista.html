@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Responsável — VanEscolar</title>
+  <title>Cadastro de Motorista — VanConecta</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 </head>
@@ -11,41 +11,37 @@
 
   <nav class="navbar">
     <div class="nav-brand">
-      <a href="../FrontEnd/index.html" style="text-decoration:none;display:flex;align-items:center;gap:10px;color:inherit">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:10px;color:inherit">
         <span class="brand-icon">🚐</span>
-        <span class="brand-name">VanConecta - Para Responsáveis</span>
+        <span class="brand-name">VanConecta - Para Motorista</span>
       </a>
     </div>
     <div class="nav-links">
-      <a href="../FrontEnd/index.html">← Voltar</a>
+      <a href="index.html">← Voltar</a>
     </div>
   </nav>
 
   <div class="form-main">
     <div class="form-sidebar">
-      <h2>Cadastre-se com segurança</h2>
-      <p>Registre seus dados como responsável e do aluno. Encontre motoristas verificados na sua região.</p>
+      
+      <h2>Cadastre sua van escolar</em></h2>
+      <p>Preencha suas informações e os dados do veículo. Famílias da sua região poderão encontrar e contratar seus serviços.</p>
       <ul class="sidebar-features">
-        <li><span class="feature-check">✓</span> Encontre Motoristas verificados</li>
-        <li><span class="feature-check">✓</span> Acompanhe o transporte</li>
-        <li><span class="feature-check">✓</span> Histórico de viagens</li>
+        <li><span class="feature-check">✓</span> Gerencie seus passageiros facilmente</li>
+        <li><span class="feature-check">✓</span> Organize rotas e horários</li>
+        <li><span class="feature-check">✓</span> Perfil verificado e confiável</li>
       </ul>
     </div>
 
     <div class="form-container">
-      <h3>Criar conta — Responsável</h3>
+      <h3>Criar conta — Motorista</h3>
       <p>Todos os campos marcados com * são obrigatórios</p>
-
-
-      <form id="form-responsavel" novalidate>
-
-        <div class="form-section-title">Dados do responsável</div>
-
-        
+      <form id="form-motorista" novalidate>
+        <div class="form-section-title">Dados pessoais</div>
         <div class="form-row">
           <div class="form-group">
             <label for="nome">Nome completo *</label>
-            <input type="text" id="nome" name="nome" placeholder="Maria Oliveira" required>
+            <input type="text" id="nome" name="nome" placeholder="João da Silva" required>
           </div>
           <div class="form-group">
             <label for="cpf">CPF *</label>
@@ -56,37 +52,13 @@
         <div class="form-row">
           <div class="form-group">
             <label for="email">E-mail *</label>
-            <input type="email" id="email" name="email" placeholder="maria@email.com" required>
+            <input type="email" id="email" name="email" placeholder="joao@email.com" required>
           </div>
           <div class="form-group">
             <label for="telefone">Telefone / WhatsApp *</label>
             <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" maxlength="15" required>
           </div>
         </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="relacao">Relação com o aluno *</label>
-            <select id="relacao" name="relacao" required>
-              <option value="">Selecione...</option>
-              <option value="pai">Pai</option>
-              <option value="mae">Mãe</option>
-              <option value="avo">Avô / Avó</option>
-              <option value="tutor">Tutor legal</option>
-              <option value="outro">Outro responsável</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="tel-emergencia">Tel. de emergência</label>
-            <input type="tel" id="tel-emergencia" name="tel-emergencia" placeholder="(11) 99999-9999" maxlength="15">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="user">Usuário *</label>
-            <input type="text" id="user" name="user" placeholder="Escolha seu usuário" minlength="8" required>
-          </div>
 
         <div class="form-row">
           <div class="form-group">
@@ -99,78 +71,70 @@
           </div>
         </div>
         <br>
-        </div>
-        <div class="form-section-title">Dados do aluno</div>
+        <div class="form-section-title"></div>
+        <div class="form-section-title">Habilitação</div>
 
         <div class="form-row">
           <div class="form-group">
-            <label for="aluno-nome">Nome do aluno *</label>
-            <input type="text" id="aluno-nome" name="aluno-nome" placeholder="Pedro Oliveira" required>
+            <label for="cnh">Número da CNH *</label>
+            <input type="text" id="cnh" name="cnh" placeholder="00000000000" maxlength="11" required>
           </div>
           <div class="form-group">
-            <label for="aluno-nasc">Data de nascimento *</label>
-            <input type="date" id="aluno-nasc" name="aluno-nasc" required>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="escola">Escola *</label>
-            <input type="text" id="escola" name="lista-escolas" placeholder="Digite e procure o nome da escola" autocomplete="off"> 
-             <div id="lista-escolas" class="lista-escolas"></div>
-            
-          </div>
-
-
-          <div class="form-group">
-            <label for="turno">Turno *</label>
-            <select id="turno" name="turno" required>
+            <label for="categoria-cnh">Categoria da CNH *</label>
+            <select id="categoria-cnh" name="categoria-cnh" required>
               <option value="">Selecione...</option>
-              <option value="manha">Manhã</option>
-              <option value="tarde">Tarde</option>
-              <option value="noite">Noite</option>
-              <option value="integral">Integral</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D — Transporte de passageiros</option>
+              <option value="E">E</option>
             </select>
           </div>
         </div>
-        
+
         <div class="form-row">
           <div class="form-group">
-          <label>CEP *</label>
-          <input
-            type="text"
-            id="cep"
-            placeholder="00000-000"
-            maxlength="9"
-          >
-        </div>
+            <label for="validade-cnh">Validade da CNH *</label>
+            <input type="date" id="validade-cnh" name="validade-cnh" required>
+          </div>
           <div class="form-group">
-          <label>Numero *</label>
-          <input
-            type="text"
-            id="numero"
-            placeholder="1015"
-            maxlength="9"
-          >
-              </div>
-              </div>
-        <div class="form-group">
-          <label for="endereco">Endereço de embarque *</label>
-          <input type="text" id="endereco" name="endereco" placeholder="Endereço" required>
+            <label for="anos-exp">Anos de experiência *</label>
+            <input type="number" id="anos-exp" name="anos-exp" placeholder="Ex: 5" min="0" max="60" required>
+          </div>
+        </div>
+        
+        <br>
+        <div class="form-section-title">Dados do Veículo</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="placa">Placa do veículo *</label>
+            <input type="text" id="placa" name="placa" placeholder="ABC-1234" maxlength="8" required>
+          </div>
+          <div class="form-group">
+            <label for="capacidade">Capacidade do veículo *</label>
+            <input type="number" id="capacidade" name="capacidade" placeholder="Ex: 15" min="1" max="50" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modelo">Modelo do veículo *</label>
+            <input type="text" id="modelo" name="modelo" placeholder="Ex: Sprinter 2020" required>
+          </div>
+          <div class="form-group">
+            <label for="ano">Ano do veículo *</label>
+            <input type="number" id="ano" name="ano" placeholder="2020" min="1990" max="2025" required>
+          </div>
         </div>
 
         <div class="form-group">
-      <label>Possui necessidade especial?</label>
-
-      <select id="necessidades" required>
-          <option value="">Selecione</option>
-          <option value="sim">Sim</option>
-          <option value="nao">Não</option>
-        </select>
+          <label for="regiao">Região / Bairros atendidos *</label>
+          <input type="text" id="regiao" name="regiao" placeholder="Ex: Centro, Vila Mariana, Ipiranga" required>
         </div>
+
         <div class="form-group">
-          <label for="obs">Necessidades especiais ou observações</label>
-          <textarea id="obs" name="obs" placeholder="Informe alergias, necessidades de acessibilidade ou qualquer informação relevante para o motorista."></textarea>
+          <label for="obs">Observações (opcional)</label>
+          <textarea id="obs" name="obs" placeholder="Horários disponíveis, escolas atendidas, etc."></textarea>
         </div>
 
         <br>
@@ -180,177 +144,70 @@
         </button>
 
         <p class="form-footer-note">
-          É motorista de van? <a href="cadastro-motorista.html">Cadastre-se aqui</a>
+          É responsável por um passageiro? <a href="cadastro-responsavel.html">Cadastre-se aqui</a>
         </p>
 
       </form>
     </div>
   </div>
 
-  <script src="main.js"></script>
-  
-
-<script>
-
-const escolaInput =
-document.getElementById('escola');
-
-const listaEscolas =
-document.getElementById('lista-escolas');
-
-escolaInput.addEventListener('input', async () => {
-
-    const termo = escolaInput.value;
-
-    if (termo.length < 3) {
-
-        listaEscolas.innerHTML = '';
-        return;
-    }
-
-    try {
-
-        const response = await fetch(
-            `http://localhost:3000/escolas/buscar?nome=${termo}`
-        );
-
-        const escolas = await response.json();
-
-        listaEscolas.innerHTML = '';
-
-        escolas.forEach(escola => {
-
-            const div = document.createElement('div');
-
-            div.classList.add('item-escola');
-
-            div.innerText = escola.NO_Entidade;
-
-            div.addEventListener('click', () => {
-
-                escolaInput.value =
-                    escola.NO_Entidade;
-
-                listaEscolas.innerHTML = '';
-            });
-
-            listaEscolas.appendChild(div);
-        });
-
-    } catch (err) {
-
-        console.log(err);
-    }
-
-});
-
-</script>
-
-
-<script>
-
-document
-.getElementById('cep')
-.addEventListener('blur', async () => {
-
-    const cep = document
-        .getElementById('cep')
-        .value
-        .replace(/\D/g, '');
-
-    if (cep.length !== 8) {
-        return;
-    }
-
-    try {
-
-        const response = await fetch(
-            `https://viacep.com.br/ws/${cep}/json/`
-        );
-
-        const data = await response.json();
-
-        if (data.erro) {
-
-            alert('CEP não encontrado');
-            return;
-        }
-
-        document.getElementById('endereco').value =
-            `${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`;
-
-    } catch (err) {
-
-        console.log(err);
-
-        alert('Erro ao buscar CEP');
-    }
-
-});
-
-</script>
-
-
-  <!-- Envio das informações para o backend -->
+  <script src="../js/main.js"></script>
   <script>
-    document.getElementById('form-responsavel')
-.addEventListener('submit', async function(e) {
+    document.getElementById('form-motorista').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const success = document.getElementById('alert-success');
+      const error = document.getElementById('alert-error');
+      error.style.display = 'none';
+      success.style.display = 'none';
 
-    e.preventDefault();
+      const senha = document.getElementById('senha').value;
+      const senhaConf = document.getElementById('senha-conf').value;
 
-    const dados = {
-        nome: document.getElementById('nome').value,
-        cpf: document.getElementById('cpf').value,
-        telefone: document.getElementById('telefone').value,
-        email: document.getElementById('email').value,
-        endereco: document.getElementById('endereco').value,
-        tel2: document.getElementById('tel-emergencia').value,
-        relacao: document.getElementById('relacao').value,
-        user: document.getElementById('user').value,
-        senha: document.getElementById('senha').value,
-        aluno: document.getElementById('aluno-nome').value,
-        nasc: document.getElementById('aluno-nasc').value,
-        escola: document.getElementById('escola').value,
-        turno: document.getElementById('turno').value,
-        obs: document.getElementById('obs').value,
-        necessidades: document.getElementById('necessidades').value,
-        cep: document.getElementById('cep').value,
-        numero: document.getElementById('numero').value
+      if (senha !== senhaConf) {
+        error.textContent = 'As senhas não coincidem.';
+        error.style.display = 'block';
+        error.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
 
-    };
+      const required = this.querySelectorAll('[required]');
+      let valid = true;
+      required.forEach(field => {
+        if (!field.value.trim()) { field.style.borderColor = '#e74c3c'; valid = false; }
+        else field.style.borderColor = '';
+      });
 
-    try {
+      if (!valid) {
+        error.textContent = 'Por favor, preencha todos os campos obrigatórios.';
+        error.style.display = 'block';
+        error.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
 
-    const response = await fetch('http://localhost:3000/responsaveis/cadastro', {
-        
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dados)
-            }
-        );
+      success.style.display = 'block';
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      this.reset();
+    });
 
-        const result = await response.json();
+    // Máscaras
+    document.getElementById('cpf').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g,'');
+      v = v.replace(/(\d{3})(\d)/,'$1.$2');
+      v = v.replace(/(\d{3})(\d)/,'$1.$2');
+      v = v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+      this.value = v;
+    });
 
-        console.log(result);
+    document.getElementById('telefone').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g,'');
+      v = v.replace(/^(\d{2})(\d)/,'($1) $2');
+      v = v.replace(/(\d{5})(\d{1,4})$/,'$1-$2');
+      this.value = v;
+    });
 
-        if (response.ok) {
-
-    alert(result.message);
-
-} else {
-
-    alert(result.error);
-}
-
-    } catch(err) {
-
-        console.log(err);
-
-        alert('Erro ao conectar com API');
-    }
-});
+    document.getElementById('placa').addEventListener('input', function() {
+      this.value = this.value.toUpperCase();
+    });
   </script>
 </body>
 </html>

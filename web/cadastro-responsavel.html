@@ -11,13 +11,13 @@
 
   <nav class="navbar">
     <div class="nav-brand">
-      <a href="../FrontEnd/index.html" style="text-decoration:none;display:flex;align-items:center;gap:10px;color:inherit">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:10px;color:inherit">
         <span class="brand-icon">🚐</span>
         <span class="brand-name">VanConecta - Para Responsáveis</span>
       </a>
     </div>
     <div class="nav-links">
-      <a href="../FrontEnd/index.html">← Voltar</a>
+      <a href="index.html">← Voltar</a>
     </div>
   </nav>
 
@@ -189,37 +189,50 @@ escolaInput.addEventListener('input', async () => {
 
     try {
 
-        const response = await fetch(
-            `http://localhost:3000/escolas/buscar?nome=${termo}`
-        );
+    const response = await fetch(
+    `/escolas/buscar?nome=${encodeURIComponent(termo)}`
+);
 
-        const escolas = await response.json();
+    const escolas = await response.json();
 
-        listaEscolas.innerHTML = '';
+    listaEscolas.innerHTML = '';
 
-        escolas.forEach(escola => {
+    if (escolas.length === 0) {
 
-            const div = document.createElement('div');
+        const div = document.createElement('div');
 
-            div.classList.add('item-escola');
+        div.classList.add('item-escola');
 
-            div.innerText = escola.NO_Entidade;
+        div.innerText =
+            'Nenhuma escola encontrada. Você pode digitar o nome manualmente.';
 
-            div.addEventListener('click', () => {
+        listaEscolas.appendChild(div);
 
-                escolaInput.value =
-                    escola.NO_Entidade;
+        return;
+    }
 
-                listaEscolas.innerHTML = '';
-            });
+    escolas.forEach(escola => {
 
-            listaEscolas.appendChild(div);
+        const div = document.createElement('div');
+
+        div.classList.add('item-escola');
+
+        div.innerText = escola.NO_Entidade;
+
+        div.addEventListener('click', () => {
+
+            escolaInput.value = escola.NO_Entidade;
+
+            listaEscolas.innerHTML = '';
         });
 
-    } catch (err) {
+        listaEscolas.appendChild(div);
+    });
 
-        console.log(err);
-    }
+} catch (err) {
+
+    console.error('Erro ao buscar escolas:', err);
+}
 
 });
 
