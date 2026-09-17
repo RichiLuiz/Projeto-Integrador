@@ -60,6 +60,12 @@
           </div>
         </div>
 
+         <div class="form-row">
+          <div class="form-group">
+            <label for="user">Usuário *</label>
+            <input type="text" id="user" name="user" placeholder="Escolha seu usuário" minlength="8" required>
+          </div>
+
         <div class="form-row">
           <div class="form-group">
             <label for="senha">Senha *</label>
@@ -69,6 +75,7 @@
             <label for="senha-conf">Confirmar senha *</label>
             <input type="password" id="senha-conf" name="senha-conf" placeholder="Repita a senha" required>
           </div>
+        </div>
         </div>
         <br>
         <div class="form-section-title"></div>
@@ -138,6 +145,24 @@
         </div>
 
         <br>
+
+        <div id="alert-error" class="alert-error" style="display: none;"></div>
+
+        <div id="alert-success" class="alert-success" style="display: none;">
+  <div class="success-icon">✓</div>
+
+  <h4>Cadastro realizado com sucesso!</h4>
+
+  <p>
+    Sua conta de motorista foi criada.
+    Agora você já pode acessar o VanConecta.
+  </p>
+
+  <a href="index.html" class="btn btn--primary">
+    Ir para o login
+  </a>
+</div>
+
         <button type="submit" class="btn btn--primary btn--full">
           <span>Criar minha conta</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -151,63 +176,211 @@
     </div>
   </div>
 
-  <script src="../js/main.js"></script>
+  <script src="main.js"></script>
   <script>
-    document.getElementById('form-motorista').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const success = document.getElementById('alert-success');
-      const error = document.getElementById('alert-error');
-      error.style.display = 'none';
-      success.style.display = 'none';
+  document.getElementById('form-motorista').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-      const senha = document.getElementById('senha').value;
-      const senhaConf = document.getElementById('senha-conf').value;
+    const form = this;
 
-      if (senha !== senhaConf) {
-        error.textContent = 'As senhas não coincidem.';
-        error.style.display = 'block';
-        error.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
+    const success = document.getElementById('alert-success');
+    const error = document.getElementById('alert-error');
+
+    success.style.display = 'none';
+    error.style.display = 'none';
+
+    // =========================
+    // SENHAS
+    // =========================
+
+    const senha = document.getElementById('senha').value;
+    const senhaConf = document.getElementById('senha-conf').value;
+
+    if (senha !== senhaConf) {
+      error.textContent = 'As senhas não coincidem.';
+      error.style.display = 'block';
+      error.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // =========================
+    // CAMPOS OBRIGATÓRIOS
+    // =========================
+
+    const required = form.querySelectorAll('[required]');
+    let valid = true;
+
+    required.forEach(field => {
+      if (!field.value.trim()) {
+        field.style.borderColor = '#e74c3c';
+        valid = false;
+      } else {
+        field.style.borderColor = '';
       }
+    });
 
-      const required = this.querySelectorAll('[required]');
-      let valid = true;
-      required.forEach(field => {
-        if (!field.value.trim()) { field.style.borderColor = '#e74c3c'; valid = false; }
-        else field.style.borderColor = '';
+    if (!valid) {
+      error.textContent = 'Por favor, preencha todos os campos obrigatórios.';
+      error.style.display = 'block';
+      error.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // =========================
+    // MONTA OS DADOS
+    // =========================
+
+    const dados = {
+      nome: document.getElementById('nome').value.trim(),
+
+      cpf: document.getElementById('cpf').value.trim(),
+
+      email: document.getElementById('email').value.trim(),
+
+      telefone: document.getElementById('telefone').value.trim(),
+
+      cnh: document.getElementById('cnh').value.trim(),
+
+      categoria_cnh: document.getElementById('categoria-cnh').value,
+
+      validade_cnh: document.getElementById('validade-cnh').value,
+
+      anos_exp: document.getElementById('anos-exp').value,
+
+      user: document.getElementById('user').value.trim(),
+
+      placa: document.getElementById('placa').value.trim(),
+
+      capacidade: document.getElementById('capacidade').value,
+
+      obs: document.getElementById('obs').value.trim(),
+
+      modelo: document.getElementById('modelo').value.trim(),
+
+      ano: document.getElementById('ano').value,
+
+      regiao: document.getElementById('regiao').value.trim(),
+
+      senha: senha
+    };
+
+    // =========================
+    // ENVIA PARA A API
+    // =========================
+
+    try {
+
+      const response = await fetch('/motoristas/cadastro', {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify(dados)
       });
 
-      if (!valid) {
-        error.textContent = 'Por favor, preencha todos os campos obrigatórios.';
-        error.style.display = 'block';
-        error.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
+      const resultado = await response.json();
+
+      // =========================
+      // ERRO DA API
+      // =========================
+
+      if (!response.ok) {
+
+    console.error('Erro retornado pela API:', resultado);
+
+    error.textContent =
+      resultado.error ||
+      resultado.detalhe ||
+      'Não foi possível realizar o cadastro.';
+
+    error.style.display = 'block';
+
+    error.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    return;
+}
+
+      // =========================
+      // SUCESSO
+      // =========================
+
+      success.textContent =
+        resultado.message ||
+        'Motorista cadastrado com sucesso!';
 
       success.style.display = 'block';
-      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      this.reset();
-    });
 
-    // Máscaras
-    document.getElementById('cpf').addEventListener('input', function() {
-      let v = this.value.replace(/\D/g,'');
-      v = v.replace(/(\d{3})(\d)/,'$1.$2');
-      v = v.replace(/(\d{3})(\d)/,'$1.$2');
-      v = v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
-      this.value = v;
-    });
+        success.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
 
-    document.getElementById('telefone').addEventListener('input', function() {
-      let v = this.value.replace(/\D/g,'');
-      v = v.replace(/^(\d{2})(\d)/,'($1) $2');
-      v = v.replace(/(\d{5})(\d{1,4})$/,'$1-$2');
-      this.value = v;
-    });
+        form.reset();
+        form.style.display = 'none';
 
-    document.getElementById('placa').addEventListener('input', function() {
-      this.value = this.value.toUpperCase();
-    });
-  </script>
+    } catch (err) {
+
+      console.error('Erro ao cadastrar motorista:', err);
+
+      error.textContent =
+        'Não foi possível conectar com a API. Verifique se o servidor está funcionando.';
+
+      error.style.display = 'block';
+
+      error.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  });
+
+
+  // =========================
+  // MÁSCARA CPF
+  // =========================
+
+  document.getElementById('cpf').addEventListener('input', function() {
+
+    let v = this.value.replace(/\D/g, '');
+
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    this.value = v;
+  });
+
+
+  // =========================
+  // MÁSCARA TELEFONE
+  // =========================
+
+  document.getElementById('telefone').addEventListener('input', function() {
+
+    let v = this.value.replace(/\D/g, '');
+
+    v = v.replace(/^(\d{2})(\d)/, '($1) $2');
+    v = v.replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+
+    this.value = v;
+  });
+
+
+  // =========================
+  // PLACA
+  // =========================
+
+  document.getElementById('placa').addEventListener('input', function() {
+
+    this.value = this.value.toUpperCase();
+
+  });
+
+</script>
 </body>
 </html>

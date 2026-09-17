@@ -118,9 +118,9 @@ router.post('/cadastro', async (req, res) => {
 
         const loginExiste = await client.query(
             `
-                SELECT UserID
-                FROM Users
-                WHERE Username = $1
+                SELECT userid
+                FROM users
+                WHERE username = $1
             `,
             [user]
         );
@@ -138,8 +138,8 @@ router.post('/cadastro', async (req, res) => {
 
         const emailExiste = await client.query(
             `
-                SELECT UserID
-                FROM Motoristas
+                SELECT userid
+                FROM motoristas
                 WHERE Email = $1
             `,
             [email]
@@ -158,9 +158,9 @@ router.post('/cadastro', async (req, res) => {
 
         const cpfExiste = await client.query(
             `
-                SELECT UserID
-                FROM Motoristas
-                WHERE CPF = $1
+                SELECT userid
+                FROM motoristas
+                WHERE cpf = $1
             `,
             [cpfRecebido]
         );
@@ -178,9 +178,9 @@ router.post('/cadastro', async (req, res) => {
 
         const cnhExiste = await client.query(
             `
-                SELECT UserID
-                FROM Motoristas
-                WHERE CNH = $1
+                SELECT userid
+                FROM motoristas
+                WHERE cnh = $1
             `,
             [somenteNumerosCNH]
         );
@@ -198,9 +198,9 @@ router.post('/cadastro', async (req, res) => {
 
         const placaExiste = await client.query(
             `
-                SELECT ID_Veiculo
-                FROM Veiculos
-                WHERE Placa = $1
+                SELECT id_veiculo
+                FROM veiculos
+                WHERE placa = $1
             `,
             [placaLimpa]
         );
@@ -218,9 +218,9 @@ router.post('/cadastro', async (req, res) => {
 
         const roleResult = await client.query(
             `
-                SELECT RoleID
-                FROM Roles
-                WHERE RoleName = 'Motorista'
+                SELECT roleid
+                FROM roles
+                WHERE rolename = 'Motorista'
                 LIMIT 1
             `
         );
@@ -250,12 +250,12 @@ router.post('/cadastro', async (req, res) => {
 
         await client.query(
             `
-                INSERT INTO Users
+                INSERT INTO users
                 (
-                    UserID,
-                    Username,
-                    RoleID,
-                    PasswordHash
+                    userid,
+                    username,
+                    roleid,
+                    passwordhash
                 )
                 VALUES
                 (
@@ -279,17 +279,17 @@ router.post('/cadastro', async (req, res) => {
 
         const motoristaResult = await client.query(
             `
-                INSERT INTO Motoristas
+                INSERT INTO motoristas
                 (
-                    UserID,
-                    NomeMotorista,
-                    CPF,
-                    Contato1,
-                    CNH,
-                    Categoria_CNH,
-                    Validade_CNH,
-                    Email,
-                    TempoExperiencia
+                    userid,
+                    nomemotorista,
+                    cpf,
+                    contato1,
+                    cnh,
+                    categoria_cnh,
+                    validade_cnh,
+                    email,
+                    tempoexperiencia
                 )
                 VALUES
                 (
@@ -331,14 +331,14 @@ router.post('/cadastro', async (req, res) => {
 
         await client.query(
             `
-                INSERT INTO Veiculos
+                INSERT INTO veiculos
                 (
-                    ID_Motorista,
-                    Placa,
-                    Capacidade,
-                    Modelo,
-                    Ano_Veiculo,
-                    Regiao,
+                    id_motorista,
+                    placa,
+                    capacidade,
+                    modelo,
+                    ano_veiculo,
+                    regiao,
                     observacoes
                 )
                 VALUES
