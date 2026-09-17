@@ -308,20 +308,18 @@
       // =========================
       // SUCESSO
       // =========================
-
       success.textContent =
         resultado.message ||
         'Motorista cadastrado com sucesso!';
 
       success.style.display = 'block';
 
-        success.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
+      success.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
 
-        form.reset();
-        form.style.display = 'none';
+      form.reset();
 
     } catch (err) {
 
