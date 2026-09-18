@@ -43,34 +43,26 @@ router.get('/dashboard/:username', async (req, res) => {
         // =========================
         // BUSCA ALUNO
         // =========================
-         //   
-       const alunoResult = await pool.query(`
-    SELECT
-        A.id_aluno,
-        A.nome,
-        A.data_nascimento,
-        A.escola,
-        A.turno,
-        A.necessidadeespecial,
-        CONCAT(
-            SPLIT_PART(A.ponto_embarque, ',', 1),
-            ' ',
-            R.numero
-        ) AS ponto_embarque,
-        CAST(C.co_cep AS VARCHAR(20)) AS co_cep
-    FROM aluno A
-    right JOIN responsaveis R
-        ON A.id_responsavel = R.id_responsavel
-    left JOIN importa_censo_2025 C
-        ON A.id_escola = C.co_entidade
-    WHERE A.id_responsavel = $1
-    LIMIT 1
-`, [responsavel.id_responsavel]);
+   
+        let aluno = null;
 
-    const aluno =
-            alunoResult.rows.length > 0
-             ? alunoResult.rows[0]
-                : null;
+        const alunoResult = await pool.query(`
+            SELECT
+                A.id_aluno,
+                A.nome,
+                A.data_nascimento,
+                A.escola,
+                A.turno,
+                A.necessidadeespecial,
+                A.ponto_embarque
+            FROM aluno A
+            WHERE A.id_responsavel = $1
+            LIMIT 1
+        `, [responsavel.id_responsavel]);
+
+        if (alunoResult.rows.length > 0) {
+            aluno = alunoResult.rows[0];
+        }
 
         // =========================
         // Busca Motorista

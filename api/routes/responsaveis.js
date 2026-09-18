@@ -3,35 +3,22 @@ const router = express.Router();
 
 const { pool } = require('../db');
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt');
 
-const { cpf: cpfValidator } = require('cpf-cnpj-validator');
+const { cpf } = require('cpf-cnpj-validator');
 
 router.post('/cadastro', async (req, res) => {
 
-    const transaction = await pool.connect();
+    const client = await pool.connect();
     const bcrypt = require('bcrypt');
     try {
 
         const {
             nome,
-            cpf,
+            cpf: cpfRecebido,
             telefone,
             email,
-            endereco,
-            tel2,
-            relacao,
             user,
-            senha,
-
-            aluno,
-            nasc,
-            escola,
-            turno,
-            obs,
-            necessidades,
-            cep,
-            numero
+            senha
         } = req.body;
 
         // =========================
@@ -55,7 +42,7 @@ router.post('/cadastro', async (req, res) => {
         }
 
         // CPF
-        if (!cpfValidator.isValid(cpf)) {
+        if (!cpfRecebido || !cpf.isValid(cpfRecebido)) {
 
             return res.status(400).json({
                 error: 'CPF inválido'
@@ -74,18 +61,17 @@ router.post('/cadastro', async (req, res) => {
         // VERIFICA LOGIN
         // =========================
 
-        const loginExiste = await new sql.Request()
-            .input('Username', sql.VarChar, user)
-            .query(`
-                SELECT UserID
-                FROM Users
-                WHERE Username = @Username
-            `);
+        const loginExiste = await client.query(`
+                SELECT userid
+                FROM users
+                WHERE username = $1
+            `,[user]
+        );
 
-        if (loginExiste.recordset.length > 0) {
+        if (loginExiste.rows.length > 0) {
 
             return res.status(400).json({
-                error: 'Login já cadastrado'
+                error: 'Login de usuário já cadastrado, favor escolher outro'
             });
         }
 
@@ -93,15 +79,14 @@ router.post('/cadastro', async (req, res) => {
         // VERIFICA EMAIL
         // =========================
 
-        const emailExiste = await new sql.Request()
-            .input('Email', sql.VarChar, email)
-            .query(`
-                SELECT ID_Responsavel
-                FROM Responsaveis
-                WHERE Email = @Email
-            `);
+        const emailExiste = await client.query(
+            `
+                SELECT userid
+                FROM responsaveis
+                WHERE Email = $1
+            `, [email] );
 
-        if (emailExiste.recordset.length > 0) {
+        if (emailExiste.rows.length > 0) {
 
             return res.status(400).json({
                 error: 'Email já cadastrado'
@@ -112,15 +97,16 @@ router.post('/cadastro', async (req, res) => {
         // VERIFICA CPF
         // =========================
 
-        const cpfExiste = await new sql.Request()
-            .input('CPF', sql.VarChar, cpf)
-            .query(`
-                SELECT ID_Responsavel
-                FROM Responsaveis
-                WHERE CPF = @CPF
-            `);
+        const cpfExiste = await client.query(
+            `
+                SELECT userid
+                FROM responsaveis
+                WHERE cpf = $1
+            `,
+            [cpfRecebido]
+        );
 
-        if (cpfExiste.recordset.length > 0) {
+        if (cpfExiste.rows.length > 0) {
 
             return res.status(400).json({
                 error: 'CPF já cadastrado'
@@ -131,220 +117,105 @@ router.post('/cadastro', async (req, res) => {
         // BUSCA ROLE
         // =========================
 
-        const roleResult = await new sql.Request()
-            .query(`
-                SELECT TOP 1 RoleID
-                FROM Roles
-                WHERE RoleName = 'Responsavel'
+        const roleResult = await client.query(
+            `
+                SELECT roleid
+                FROM roles
+                WHERE rolename = 'Responsavel'
             `);
 
-        if (roleResult.recordset.length === 0) {
+        if (roleResult.rows.length === 0) {
 
             return res.status(400).json({
                 error: 'Role Responsavel não encontrada'
             });
         }
 
-        const roleId = roleResult.recordset[0].RoleID;
-
-        // =========================
-        // BUSCA RELAÇÃO
-        // =========================
-
-        const relacaoResult = await new sql.Request()
-            .input('Relacao', sql.VarChar, relacao)
-            .query(`
-                SELECT TOP 1 ID_Relacao
-                FROM Relacao_Responsaveis
-                WHERE Relacao = @Relacao
-            `);
-
-        if (relacaoResult.recordset.length === 0) {
-
-            return res.status(400).json({
-                error: 'Relação não encontrada'
-            });
-        }
-
-        const idRelacao =
-            relacaoResult.recordset[0].ID_Relacao;
-            
-
-        // =========================
-        // NECESSIDADE ESPECIAL
-        // =========================
-
-        const necessidadeEspecial =
-            necessidades === 'sim' ||
-            necessidades === true
-                ? 1
-                : 0;
-
-        // =========================
-        // BUSCA ID Escola
-        // =========================
-
-        const idescolaResult = await new sql.Request()
-            .input('Escola', sql.VarChar, escola)
-            .query(`
-                SELECT TOP 1 CO_Entidade
-                FROM [Importa_Censo_2025]
-                WHERE NO_Entidade = @Escola
-            `);
-
-        const idescola =
-            idescolaResult.recordset[0].CO_Entidade;
-
-
-
-        // =========================
-        // HASH SENHA
-        // =========================
-
-        const senhaHash = await bcrypt.hash(senha, 10);
+        const roleId = roleResult.rows[0].roleid;
 
         const userId = uuidv4();
+
 
         // =========================
         // INICIA TRANSACTION
         // =========================
+        await client.query('BEGIN');
 
-        await transaction.begin();
 
-        const requestUser =
-            new sql.Request(transaction);
+        // =========================
+        // HASH DA SENHA
+        // =========================
+        const senhaHash = await bcrypt.hash(senha, 10);
 
-        const requestResponsavel =
-            new sql.Request(transaction);
-
-        const requestAluno =
-            new sql.Request(transaction);
 
         // =========================
         // INSERT USERS
         // =========================
 
-        await requestUser
-            .input('UserID', sql.UniqueIdentifier, userId)
-            .input('Username', sql.VarChar, user)
-            .input('RoleID', sql.UniqueIdentifier, roleId)
-            .input('PasswordHash', sql.VarChar, senhaHash)
-            .query(`
+        await client.query(
+            `
                 INSERT INTO Users
                 (
-                    UserID,
-                    Username,
-                    RoleID,
-                    PasswordHash
+                    userid,
+                    username,
+                    roleid,
+                    passwordhash
                 )
                 VALUES
                 (
-                    @UserID,
-                    @Username,
-                    @RoleID,
-                    @PasswordHash
+                    $1,
+                    $2,
+                    $3,
+                    $4
                 )
-            `);
+            `,
+            [
+                userId,
+                user,
+                roleId,
+                senhaHash
+            ]
+        );
 
         // =========================
         // INSERT RESPONSAVEL
         // =========================
 
-        const responsavelResult =
-            await requestResponsavel
-                .input('UserID', sql.UniqueIdentifier, userId)
-                .input('Nome', sql.VarChar, nome)
-                .input('CPF', sql.VarChar, cpf)
-                .input('Contato1', sql.VarChar, telefone)
-                .input('Contato2', sql.VarChar, tel2)
-                .input('Email', sql.VarChar, email)
-                .input('Endereco', sql.VarChar, endereco)
-                .input('CEP', sql.VarChar, cep)
-                .input('Numero', sql.VarChar, numero)
-                .query(`
-                    INSERT INTO Responsaveis
+        const responsavelResult =await client.query(
+            `
+             INSERT INTO Responsaveis
                     (
-                        UserID,
-                        Nome,
-                        CPF,
-                        Contato1,
-                        Contato2,
-                        Email,
-                        Endereco,
-                        cep,
-                        numero
+                        userid,
+                        nome,
+                        cpf,
+                        contato1,
+                        email
                     )
-
-                    OUTPUT INSERTED.ID_Responsavel
-
                     VALUES
                     (
-                        @UserID,
-                        @Nome,
-                        @CPF,
-                        @Contato1,
-                        @Contato2,
-                        @Email,
-                        @Endereco,
-                        @CEP,
-                        @Numero
+                    $1,
+                    $2,
+                    $3,
+                    $4,
+                    $5
                     )
-                `);
+                `,
+                [
+                userId,
+                nome,
+                cpfRecebido,
+                telefone,
+                email    
+                ]
+            
+                );
 
-        const idResponsavel =
-            responsavelResult.recordset[0].ID_Responsavel;
-
-        // =========================
-        // INSERT ALUNO
-        // =========================
-
-        await requestAluno
-            .input('ID_Responsavel', sql.Int, idResponsavel)
-            .input('aluno', sql.VarChar, aluno)
-            .input('Nascimento', sql.Date, nasc)
-            .input('Escola', sql.VarChar, escola)
-            .input('Turno', sql.VarChar, turno)
-            .input('ID_Relacao', sql.Int, idRelacao)
-            .input('NecessidadeEspecial', sql.Bit, necessidadeEspecial)
-            .input('PontoEmbarque', sql.VarChar, endereco)
-            .input('obs', sql.VarChar, obs)
-            .input('ID_Escola', sql.VarChar, idescola)
-            .query(`
-                INSERT INTO Aluno
-                (
-                    ID_Responsavel,
-                    Nome,
-                    Data_Nascimento,
-                    Escola,
-                    Turno,
-                    ID_Relacao,
-                    NecessidadeEspecial,
-                    Ponto_Embarque,
-                    observacao,
-                    ponto_desembarque,
-                    id_escola
-                )
-                VALUES
-                (
-                    @ID_Responsavel,
-                    @aluno,
-                    @Nascimento,
-                    @Escola,
-                    @Turno,
-                    @ID_Relacao,
-                    @NecessidadeEspecial,
-                    @PontoEmbarque,
-                    @obs,
-                    @Escola,
-                    @ID_Escola
-                )
-            `);
 
         // =========================
         // COMMIT
         // =========================
 
-        await transaction.commit();
+        await client.query('COMMIT');
 
         res.status(201).json({
             message: 'Responsável cadastrado com sucesso'
@@ -354,14 +225,23 @@ router.post('/cadastro', async (req, res) => {
 
         console.log('ERRO REAL:', err);
 
+       // =========================
+        // ROLLBACK
+        // =========================
+
         try {
-            await transaction.rollback();
+            await client.query('ROLLBACK');
         } catch {}
 
         res.status(500).json({
-            error: 'Erro ao cadastrar responsável',
+            error: 'Erro no cadastro',
             detalhe: err.message
         });
+
+    } finally {
+
+        client.release();
+
     }
 });
 

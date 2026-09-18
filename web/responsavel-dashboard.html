@@ -238,40 +238,40 @@
         // =========================
 
         document.getElementById('nome')
-          .innerText = result.responsavel.Nome;
+          .innerText = result.responsavel.nome;
 
         document.getElementById('cpf')
-          .innerText = result.responsavel.CPF;
+          .innerText = result.responsavel.cpf;
 
         document.getElementById('email')
-          .innerText = result.responsavel.Email;
+          .innerText = result.responsavel.email;
 
         document.getElementById('telefone1')
-          .innerText = result.responsavel.Contato1;
+          .innerText = result.responsavel.contato1;
 
         document.getElementById('telefone2')
           .innerText =
-          result.responsavel.Contato2 || '-';
+          result.responsavel.contato2 || '-';
 
         document.getElementById('endereco')
-          .innerText = result.responsavel.Endereco;
+          .innerText = result.responsavel.endereco;
         
         document.getElementById('numero')
-          .innerText = result.responsavel.Numero;
+          .innerText = result.responsavel.numero;
 
         document.getElementById('cep')
-          .innerText = result.responsavel.CEP;
+          .innerText = result.responsavel.cep;
 
         // =========================
         // ALUNO
         // =========================
 
         document.getElementById('aluno')
-          .innerText = result.aluno.Nome;
+          .innerText = result.aluno.nome;
 
         // DATA FORMATADA
         const nascimento =
-          result.aluno.Data_Nascimento
+          result.aluno.data_nascimento
             .split('T')[0]
             .split('-')
             .reverse()
@@ -281,23 +281,23 @@
           .innerText = nascimento;
 
         document.getElementById('escola')
-          .innerText = result.aluno.Escola;
+          .innerText = result.aluno.escola;
           
         document.getElementById('cepescola')
-          .innerText = result.aluno.CO_CEP;
+          .innerText = result.aluno.co_cep;
 
         document.getElementById('turno')
-          .innerText = result.aluno.Turno;
+          .innerText = result.aluno.turno;
 
         document.getElementById('necessidade')
           .innerText =
-          result.aluno.NecessidadeEspecial
+          result.aluno.necessidadeespecial
             ? 'Sim'
             : 'Não';
 
         document.getElementById('embarque')
           .innerText =
-          result.aluno.Ponto_Embarque;
+          result.aluno.ponto_embarque;
 
 
 
@@ -328,7 +328,7 @@ primeiros10.forEach((motorista, index) => {
     selectMotorista.innerHTML += `
     
         <option value="${index}">
-            ${motorista.NomeMotorista}
+            ${motorista.nomemotorista}
         </option>
     `;
 });
@@ -355,28 +355,28 @@ selectMotorista.addEventListener('change', () => {
                 <div class="dashboard-item">
                     <span>Motorista</span>
                     <strong>
-                        ${motorista.NomeMotorista || '-'}
+                        ${motorista.nomemotorista || '-'}
                     </strong>
                 </div>
 
                 <div class="dashboard-item">
                     <span>Contato</span>
                     <strong>
-                        ${motorista.Contato1 || '-'}
+                        ${motorista.contato1 || '-'}
                     </strong>
                 </div>
 
                 <div class="dashboard-item">
                     <span>Experiência</span>
                     <strong>
-                        ${motorista.TempoExperiencia || 0} anos
+                        ${motorista.tempoexperiencia || 0} anos
                     </strong>
                 </div>
 
                 <div class="dashboard-item">
                     <span>Região</span>
                     <strong>
-                        ${motorista.RegiaoAtuacao || '-'}
+                        ${motorista.regiaoatuacao || '-'}
                     </strong>
                 </div>
 
