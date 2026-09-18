@@ -212,7 +212,7 @@
 
         if (!username) {
 
-          alert('Usuário não logado');
+          alert('Usuário não encontrado');
 
           window.location.href = 'index.html';
 
@@ -220,16 +220,16 @@
         }
 
         // CHAMA API
-        const response = await fetch(
-          `http://localhost:3000/responsaveis/dashboard/${username}`
+       const response = await fetch(
+          `/responsaveis/dashboard/${encodeURIComponent(username)}`
         );
-
+              
         const result = await response.json();
-
+              
         if (!response.ok) {
-
-          alert(result.error);
-
+        
+          alert(result.error || 'Erro ao carregar dados do responsável');
+        
           return;
         }
 

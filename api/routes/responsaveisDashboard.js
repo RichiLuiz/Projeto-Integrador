@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { sql } = require('../db');
+const { pool } = require('../db');
 
 router.get('/dashboard/:username', async (req, res) => {
 
@@ -13,85 +13,78 @@ router.get('/dashboard/:username', async (req, res) => {
         // BUSCA RESPONSÁVEL
         // =========================
 
-        const responsavelResult = await new sql.Request()
-            .input('Username', sql.VarChar, username)
-            .query(`
-                SELECT
-                    R.ID_Responsavel,
-                    R.Nome,
-                    R.CPF,
-                    R.Contato1,
-                    R.Contato2,
-                    R.Email,
-                    R.Endereco,
-                    R.Numero,
-                    R.CEP,
-                    U.Username
-                    
-                FROM Responsaveis R
-                INNER JOIN Users U
-                    ON R.UserID = U.UserID
-                WHERE U.Username = @Username
-            `);
+        const responsavelResult = await pool.query(`
+            SELECT
+                    R.id_responsavel,
+                    R.nome,
+                    R.cpf,
+                    R.contato1,
+                    R.contato2,
+                    R.email,
+                    R.endereco,
+                    R.numero,
+                    R.cep,
+                    U.username
+                FROM responsaveis R
+                INNER JOIN users U
+                    ON R.userid = U.userid
+                WHERE U.username = $1
+        `, [username]);
 
-        if (responsavelResult.recordset.length === 0) {
+        if (responsavelResult.rows.length === 0) {
 
             return res.status(404).json({
                 error: 'Responsável não encontrado'
             });
         }
 
-        const responsavel =
-            responsavelResult.recordset[0];
+        const responsavel = responsavelResult.rows[0];
 
         // =========================
         // BUSCA ALUNO
         // =========================
+         //   
+       const alunoResult = await pool.query(`
+    SELECT
+        A.id_aluno,
+        A.nome,
+        A.data_nascimento,
+        A.escola,
+        A.turno,
+        A.necessidadeespecial,
+        CONCAT(
+            SPLIT_PART(A.ponto_embarque, ',', 1),
+            ' ',
+            R.numero
+        ) AS ponto_embarque,
+        CAST(C.co_cep AS VARCHAR(20)) AS co_cep
+    FROM aluno A
+    right JOIN responsaveis R
+        ON A.id_responsavel = R.id_responsavel
+    left JOIN importa_censo_2025 C
+        ON A.id_escola = C.co_entidade
+    WHERE A.id_responsavel = $1
+    LIMIT 1
+`, [responsavel.id_responsavel]);
 
-        const alunoResult = await new sql.Request()
-            .input(
-                'ID_Responsavel',
-                sql.Int,
-                responsavel.ID_Responsavel
-            )
-            .query(`
-                SELECT TOP 1
-                    A.ID_Aluno,
-                    A.Nome,
-                    A.Data_Nascimento,
-                    A.Escola,
-                    A.Turno,
-                    A.NecessidadeEspecial,
-                    Ponto_Embarque  = concat(substring(A.Ponto_embarque, 1, charindex(',',A.Ponto_embarque)), ' ', r.numero),
-                    CO_CEP = cast(C.CO_CEP as varchar(20))
-                FROM Aluno A
-                join responsaveis R on a.ID_Responsavel=r.ID_Responsavel
-                join Importa_Censo_2025 C on a.ID_Escola=c.CO_Entidade
-                WHERE A.ID_Responsavel = @ID_Responsavel
-            `);
-
-        const aluno =
-            alunoResult.recordset.length > 0
-                ? alunoResult.recordset[0]
+    const aluno =
+            alunoResult.rows.length > 0
+             ? alunoResult.rows[0]
                 : null;
-
-
 
         // =========================
         // Busca Motorista
         // =========================
 
-        const motoristasResult =
-    await new sql.Request()
-        .query(`
+        const motoristasResult =await pool.query(`
                     SELECT
-                    M.NomeMotorista,
-                    M.TempoExperiencia,
-                    M.RegiaoAtuacao,
-                    M.Contato1
-                    from Motoristas M
-                    WHERE M.Ativo=1 
-                `);
+                    M.nomemotorista,
+                    M.tempoexperiencia,
+                    M.regiaoatuacao,
+                    M.contato1
+                    from motoristas M
+                    WHERE M.ativo= true
+        `);
 
 
 
@@ -102,9 +95,7 @@ router.get('/dashboard/:username', async (req, res) => {
         res.json({
             responsavel,
             aluno,
-            
-            motoristas:
-        motoristasResult.recordset
+            motoristas: motoristasResult.rows
         });
 
     } catch (err) {

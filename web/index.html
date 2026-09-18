@@ -66,7 +66,7 @@
         <h3>Responsável</h3>
         <div class="step-icon">👨‍👩‍👧</div>
         <p>Cadastre-se e registre os dados do seu filho. Acompanhe o transporte e tenha mais tranquilidade no dia a dia.</p>
-        <a href="cadastro-responsavel.html" class="step-link">Cadastrar responsável →</a>
+        <a href="cadastro-responsavel.html" class="step-link">Cadastrar responsáveis →</a>
       </div>
     </div>
     </div>
@@ -130,16 +130,11 @@ document
         }
 
         // ROLE RESPONSAVEL
-        else if (result.role === 'Responsavel') {
+        if (result.role === 'Responsavel') {
 
-    localStorage.setItem(
-        'username',
-        username
-    );
-
-    window.location.href =
-    './responsavel-dashboard.html';
-}
+            window.location.href =
+            './responsavel-dashboard.html';
+        }
 
     } catch (err) {
 

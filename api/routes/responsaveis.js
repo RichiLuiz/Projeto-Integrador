@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { sql } = require('../db');
+const { pool } = require('../db');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 
@@ -9,8 +9,8 @@ const { cpf: cpfValidator } = require('cpf-cnpj-validator');
 
 router.post('/cadastro', async (req, res) => {
 
-    const transaction = new sql.Transaction();
-
+    const transaction = await pool.connect();
+    const bcrypt = require('bcrypt');
     try {
 
         const {
