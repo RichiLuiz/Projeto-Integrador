@@ -24,6 +24,7 @@ router.get('/dashboard/:username', async (req, res) => {
                     R.endereco,
                     R.numero,
                     R.cep,
+                    R.qtddependentes,
                     U.username
                 FROM responsaveis R
                 INNER JOIN users U
@@ -44,26 +45,6 @@ router.get('/dashboard/:username', async (req, res) => {
         // BUSCA ALUNO
         // =========================
    
-        let aluno = null;
-
-        const alunoResult = await pool.query(`
-            SELECT
-                A.id_aluno,
-                A.nome,
-                A.data_nascimento,
-                A.escola,
-                A.turno,
-                A.necessidadeespecial,
-                A.ponto_embarque
-            FROM aluno A
-            WHERE A.id_responsavel = $1
-            LIMIT 1
-        `, [responsavel.id_responsavel]);
-
-        if (alunoResult.rows.length > 0) {
-            aluno = alunoResult.rows[0];
-        }
-
         // =========================
         // Busca Motorista
         // =========================
@@ -85,10 +66,11 @@ router.get('/dashboard/:username', async (req, res) => {
         // =========================
 
         res.json({
-            responsavel,
-            aluno,
-            motoristas: motoristasResult.rows
-        });
+    responsavel,
+    qtddependentes: responsavel.qtddependentes,
+    dependentes: [],
+    motoristas: motoristasResult.rows
+});
 
     } catch (err) {
 

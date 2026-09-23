@@ -113,56 +113,45 @@
 
     </section>
 
-    <!-- ALUNO -->
+    <!-- DEPENDENTES -->
 
-    <section class="dashboard-card">
+<section
+    class="dashboard-card"
+    id="dependentes-section"
+    style="display: none;"
+>
 
-      <div class="card-title">
-        🎒 Dados do Aluno
-      </div>
+    <div class="card-title">
+        🎒 Dependentes
+    </div>
 
-      <div class="dashboard-grid">
+    <div id="dependentes-container"></div>
 
-        <div class="dashboard-item">
-          <span>NOME DO ALUNO</span>
-          <strong id="aluno"></strong>
-        </div>
+</section>
 
-        <div class="dashboard-item">
-          <span>DATA DE NASCIMENTO</span>
-          <strong id="nascimento"></strong>
-        </div>
+<!-- CADASTRAR DEPENDENTE -->
 
-        <div class="dashboard-item">
-          <span>ESCOLA</span>
-          <strong id="escola"></strong>
-        </div>
+<section class="dashboard-card">
 
-        <div class="dashboard-item">
-          <span>CEP ESCOLA</span>
-          <strong id="cepescola"></strong>
-        </div>
+    <div class="card-title">
+        👨‍👩‍👧 Dependentes
+    </div>
 
-        <div class="dashboard-item">
-          <span>TURNO</span>
-          <strong id="turno"></strong>
-        </div>
+    <div class="dashboard-item">
 
+        <span>Adicionar dependente</span>
 
-        <div class="dashboard-item">
-          <span>NECESSIDADE ESPECIAL</span>
-          <strong id="necessidade"></strong>
-        </div>
+        <button
+            type="button"
+            id="cadastrar-dependente-btn"
+            class="btn-primary"
+        >
+            + Cadastrar novo dependente
+        </button>
 
-        <div class="dashboard-item">
-          <span>PONTO DE EMBARQUE</span>
-          <strong id="embarque"></strong>
-        </div>
+    </div>
 
-      </div>
-
-    </section>
-
+</section>
 
 
     <!-- Procura motoristas -->
@@ -263,45 +252,145 @@
           .innerText = result.responsavel.cep;
 
         // =========================
-        // ALUNO
-        // =========================
+// DEPENDENTES
+// =========================
 
-        document.getElementById('aluno')
-          .innerText = result.aluno.nome;
+const dependentesSection =
+    document.getElementById('dependentes-section');
 
-        // DATA FORMATADA
-        const nascimento =
-          result.aluno.data_nascimento
-            .split('T')[0]
-            .split('-')
-            .reverse()
-            .join('/');
+const dependentesContainer =
+    document.getElementById('dependentes-container');
 
-        document.getElementById('nascimento')
-          .innerText = nascimento;
+const qtdDependentes =
+    Number(result.responsavel.qtddependentes || 0);
 
-        document.getElementById('escola')
-          .innerText = result.aluno.escola;
+const dependentes =
+    result.dependentes || [];
+
+
+// ======================================
+// NÃO POSSUI DEPENDENTES
+// ======================================
+
+if (qtdDependentes === 0) {
+
+    dependentesSection.style.display = 'none';
+
+}
+
+
+// ======================================
+// POSSUI DEPENDENTES
+// ======================================
+
+else {
+
+    dependentesSection.style.display = 'block';
+
+    dependentesContainer.innerHTML = '';
+
+    dependentes.forEach((dependente, index) => {
+
+        let nascimento = '-';
+
+        if (dependente.data_nascimento) {
+
+            nascimento =
+                dependente.data_nascimento
+                    .split('T')[0]
+                    .split('-')
+                    .reverse()
+                    .join('/');
+
+        }
+
+        dependentesContainer.innerHTML += `
+
+            <div class="dashboard-card">
+
+                <div class="card-title">
+                    🎒 Dependente ${index + 1}
+                </div>
+
+                <div class="dashboard-grid">
+
+                    <div class="dashboard-item">
+                        <span>NOME</span>
+                        <strong>
+                            ${dependente.nome || '-'}
+                        </strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>DATA DE NASCIMENTO</span>
+                        <strong>
+                            ${nascimento}
+                        </strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>ESCOLA</span>
+                        <strong>
+                            ${dependente.escola || '-'}
+                        </strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>CEP ESCOLA</span>
+                        <strong>
+                            ${dependente.co_cep || '-'}
+                        </strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>TURNO</span>
+                        <strong>
+                            ${dependente.turno || '-'}
+                        </strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>NECESSIDADE ESPECIAL</span>
+                        <strong>
+                            ${
+                                dependente.necessidadeespecial
+                                    ? 'Sim'
+                                    : 'Não'
+                            }
+                        </strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>PONTO DE EMBARQUE</span>
+                        <strong>
+                            ${dependente.ponto_embarque || '-'}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+    });
+
+}
+
           
-        document.getElementById('cepescola')
-          .innerText = result.aluno.co_cep;
+// =========================
+// CADASTRAR DEPENDENTE
+// =========================
 
-        document.getElementById('turno')
-          .innerText = result.aluno.turno;
+document
+    .getElementById('cadastrar-dependente-btn')
+    .addEventListener('click', () => {
 
-        document.getElementById('necessidade')
-          .innerText =
-          result.aluno.necessidadeespecial
-            ? 'Sim'
-            : 'Não';
+        window.location.href =
+            'cadastro-dependente.html';
 
-        document.getElementById('embarque')
-          .innerText =
-          result.aluno.ponto_embarque;
+    });
 
-
-
-          // =========================
+// =========================
 // MOTORISTAS
 // =========================
 
