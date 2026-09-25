@@ -18,6 +18,56 @@ function alternarAltoContraste() {
     atualizarBotoesAcessibilidade();
 }
 
+
+// ----------------------------------------
+// TEXTO GRANDE
+// ----------------------------------------
+
+function aumentarTexto() {
+
+    document.body.classList.remove("texto-pequeno");
+
+    document.body.classList.add("texto-grande");
+
+    localStorage.setItem("tamanhoTexto", "grande");
+
+    atualizarBotoesAcessibilidade();
+}
+
+
+// ----------------------------------------
+// TEXTO PEQUENO
+// ----------------------------------------
+
+function diminuirTexto() {
+
+    document.body.classList.remove("texto-grande");
+
+    document.body.classList.add("texto-pequeno");
+
+    localStorage.setItem("tamanhoTexto", "pequeno");
+
+    atualizarBotoesAcessibilidade();
+}
+
+
+// ----------------------------------------
+// TEXTO NORMAL
+// ----------------------------------------
+
+function textoNormal() {
+
+    document.body.classList.remove("texto-grande");
+
+    document.body.classList.remove("texto-pequeno");
+
+    localStorage.setItem("tamanhoTexto", "normal");
+
+    atualizarBotoesAcessibilidade();
+}
+
+
+
 // ----------------------------------------
 // ATUALIZA BOTÕES
 // ----------------------------------------
@@ -40,6 +90,7 @@ function atualizarBotoesAcessibilidade() {
 }
 
 
+
 // ----------------------------------------
 // CARREGA CONFIGURAÇÕES SALVAS
 // ----------------------------------------
@@ -48,6 +99,9 @@ function carregarConfiguracoesAcessibilidade() {
 
     const altoContraste =
         localStorage.getItem("altoContraste");
+
+    const tamanhoTexto =
+        localStorage.getItem("tamanhoTexto");
 
 
     if (altoContraste === "true") {
@@ -58,9 +112,25 @@ function carregarConfiguracoesAcessibilidade() {
     }
 
 
+    if (tamanhoTexto === "grande") {
+
+        document.body.classList.add(
+            "texto-grande"
+        );
+    }
+
+
+    if (tamanhoTexto === "pequeno") {
+
+        document.body.classList.add(
+            "texto-pequeno"
+        );
+    }
+
 
     atualizarBotoesAcessibilidade();
 }
+
 
 
 // ========================================
@@ -97,6 +167,7 @@ function configurarPainelAcessibilidade() {
 
     });
 }
+
 
 
 // ========================================
