@@ -10,6 +10,8 @@
 </head>
 <body class="home-page">
 
+</div>
+
   <nav class="navbar">
     <div class="nav-brand">
       <h1>VanConecta — Seu filho chega em segurança Sempre!</h1>
@@ -73,11 +75,40 @@
     </div>
     
   <footer class="footer">
+     <div class="footer-conteudo">
     <p>🚌 Projeto acadêmico — Transporte escolar 🚸</p>
-  </footer>
+    
+      <div class="acessibilidade">
+            <button
+                class="btn-acessibilidade"
+                id="btn-acessibilidade"
+                aria-expanded="false"
+                aria-controls="painel-acessibilidade">
+                ♿ Acessibilidade
+            </button>
+
+            <div
+                class="painel-acessibilidade"
+                id="painel-acessibilidade"
+                hidden>
+
+                <button
+                    onclick="alternarAltoContraste()"
+                    id="btn-alto-contraste">
+                    ◐ Alto contraste
+                </button>
+
+
+            </div>
+        </div>
+
+    </div>
+</footer>
+
+
 
   <script src="main.js"></script>
-
+  <script src="acessibilidade.js"></script>
 <script>
 
 document
@@ -144,6 +175,8 @@ document
     }
 
 });
+
+
 
 </script>
 

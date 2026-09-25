@@ -1084,3 +1084,100 @@ body {
   text-decoration: none;
   justify-content: center;
 }
+
+
+
+/* ========================================
+   ACESSIBILIDADE
+   ======================================== */
+
+.acessibilidade {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+
+
+/* Botão principal */
+
+.btn-acessibilidade {
+    padding: 10px 15px;
+    border: 1px solid var(--gray);
+    border-radius: 8px;
+
+    background: transparent;
+    color: inherit;
+
+    cursor: pointer;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.btn-acessibilidade:hover {
+    transform: translateY(-2px);
+}
+
+.btn-acessibilidade:focus-visible {
+    outline: 3px solid #F5C842;
+    outline-offset: 3px;
+}
+
+
+/* Painel */
+
+.painel-acessibilidade {
+    position: absolute;
+
+    right: 0;
+    bottom: calc(100% + 10px);
+
+    width: 210px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+
+    padding: 10px;
+
+    background: var(--navy);
+
+    border: 1px solid var(--gray);
+    border-radius: 10px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Botões do painel */
+
+.painel-acessibilidade button {
+    width: 100%;
+
+    padding: 9px 10px;
+
+    border: 1px solid var(--gray);
+    border-radius: 6px;
+
+    background: transparent;
+    color: white;
+
+    cursor: pointer;
+
+    font-family: inherit;
+    text-align: left;
+
+    transition: 0.2s;
+}
+
+.painel-acessibilidade button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.painel-acessibilidade button:focus-visible {
+    outline: 3px solid #F5C842;
+    outline-offset: 2px;
+}
