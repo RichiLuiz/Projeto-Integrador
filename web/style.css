@@ -1184,3 +1184,74 @@ body {
     outline: 3px solid #F5C842;
     outline-offset: 2px;
 }
+
+/* ========================================
+   ALTO CONTRASTE
+   ======================================== */
+
+body.alto-contraste {
+    background: #000 !important;
+    color: #fff !important;
+}
+
+body.alto-contraste h1,
+body.alto-contraste h2,
+body.alto-contraste h3,
+body.alto-contraste h4,
+body.alto-contraste h5,
+body.alto-contraste h6,
+body.alto-contraste p,
+body.alto-contraste span,
+body.alto-contraste label {
+    color: #fff !important;
+}
+
+body.alto-contraste a {
+    color: #ffff00 !important;
+}
+
+body.alto-contraste input,
+body.alto-contraste select,
+body.alto-contraste textarea {
+    background: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+body.alto-contraste button {
+    background: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+/* ========================================
+   TAMANHO DO TEXTO
+   ======================================== */
+
+body.texto-grande {
+    font-size: 120%;
+}
+
+body.texto-pequeno {
+    font-size: 90%;
+}
+
+body.texto-grande p,
+body.texto-grande label,
+body.texto-grande input,
+body.texto-grande select,
+body.texto-grande textarea,
+body.texto-grande button,
+body.texto-grande a {
+    font-size: 120%;
+}
+
+body.texto-pequeno p,
+body.texto-pequeno label,
+body.texto-pequeno input,
+body.texto-pequeno select,
+body.texto-pequeno textarea,
+body.texto-pequeno button,
+body.texto-pequeno a {
+    font-size: 90%;
+}
