@@ -1546,7 +1546,7 @@ body.alto-contraste {
 body.alto-contraste .navbar,
 body.alto-contraste .home-page .navbar,
 body.alto-contraste .dashboard-page .navbar {
-    background: #000000 !important;
+    background: #0A2B3E !important;
 
     border-bottom:
         2px solid #FFFFFF !important;
@@ -1570,14 +1570,14 @@ body.alto-contraste span,
 body.alto-contraste label,
 body.alto-contraste strong,
 body.alto-contraste li {
-    color: #FFFFFF !important;
+    color: #000000 !important;
 }
 
 
 /* Links */
 
 body.alto-contraste a {
-    color: #FFFFFF !important;
+    color: #ffffff !important;
 }
 
 body.alto-contraste a:hover {
@@ -1588,7 +1588,7 @@ body.alto-contraste a:hover {
 /* Sidebar */
 
 body.alto-contraste .form-sidebar {
-    background: #000000 !important;
+    background: #0A2B3E !important;
 
     border-right:
         2px solid #FFFFFF !important;
@@ -1598,7 +1598,7 @@ body.alto-contraste .form-sidebar {
 /* Container de formulário */
 
 body.alto-contraste .form-container {
-    background: #000000 !important;
+    background: #0A2B3E !important;
 }
 
 
@@ -1610,7 +1610,7 @@ body.alto-contraste textarea,
 body.alto-contraste .input-field,
 body.alto-contraste .login-form input,
 body.alto-contraste .dashboard-field input {
-    background: #000000 !important;
+    background: #0A2B3E !important;
 
     color: #FFFFFF !important;
 
@@ -1631,7 +1631,7 @@ body.alto-contraste textarea::placeholder {
 /* Select */
 
 body.alto-contraste select option {
-    background: #000000 !important;
+   background: #0A2B3E !important;
 
     color: #FFFFFF !important;
 }
@@ -1739,7 +1739,7 @@ body.alto-contraste .btn-nav,
 body.alto-contraste .btn-acessibilidade,
 body.alto-contraste .painel-acessibilidade button,
 body.alto-contraste button {
-    background: #000000 !important;
+    background: #0A2B3E !important;
 
     color: #FFFFFF !important;
 
@@ -1835,6 +1835,8 @@ body.alto-contraste .home-page .footer {
 body.alto-contraste .footer p {
     color: #FFFFFF !important;
 }
+
+
 
 
 /* =========================================================
