@@ -13,7 +13,7 @@
     <div class="nav-brand">
       <a href="responsavel-dashboard.html" style="text-decoration:none;display:flex;align-items:center;gap:10px;color:inherit">
         <span class="brand-icon">🚐</span>
-        <span class="brand-name">VanConecta - Cadastro de Dependentes</span>
+        <span class="brand-name">VanConecta - Retornar ao Dashboar do Responsavel</span>
       </a>
     </div>
     <div class="nav-links">
@@ -70,10 +70,29 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="endereco">Endereço de embarque *</label>
-          <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade" required>
+
+         <div class="form-row">
+          <div class="form-group">
+            <label for="escola">CEP de embarque*</label>
+            <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+          </div>
+          <div class="form-group">
+            <label for="turno">Rua</label>
+           <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+          </div>
         </div>
+
+         <div class="form-row">
+          <div class="form-group">
+            <label for="escola">Bairro</label>
+            <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+          </div>
+          <div class="form-group">
+            <label for="turno">Numero*</label>
+           <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+          </div>
+        </div>
+
 
         <div class="form-group">
           <label for="necessidades">Necessidades especiais ou observações</label>
@@ -86,7 +105,7 @@
 <div id="alert-success" class="alert alert--success" style="display: none;"></div>
 
 <button type="submit" class="btn btn--primary btn--full">
-    <span>Criar minha conta</span>
+    <span>Adicionar Dependente</span>
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
         <path
             d="M3 8h10M9 4l4 4-4 4"
@@ -98,11 +117,7 @@
     </svg>
 </button>
 
-        <p class="form-footer-note">
-          É motorista de van? <a href="cadastro-motorista.html">Cadastre-se aqui</a>
-        </p>
 
-      </form>
     </div>
   </div>
 
