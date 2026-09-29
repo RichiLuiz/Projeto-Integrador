@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Responsável — VanEscolar</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body class="form-page">
+
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="responsavel-dashboard.html" style="text-decoration:none;display:flex;align-items:center;gap:10px;color:inherit">
+        <span class="brand-icon">🚐</span>
+        <span class="brand-name">VanConecta - Cadastro de Dependentes</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">← Voltar</a>
+    </div>
+  </nav>
+
+  <div class="form-main">
+    <div class="form-sidebar">
+      <h2>Cadastre-se com segurança</h2>
+      <p>Registre os dados do dependente. Encontre motoristas verificados na sua região.</p>
+      <ul class="sidebar-features">
+        <li><span class="feature-check">✓</span> Encontre Motoristas verificados</li>
+        <li><span class="feature-check">✓</span> Acompanhe o transporte</li>
+        <li><span class="feature-check">✓</span> Histórico de viagens</li>
+      </ul>
+    </div>
+
+    <div class="form-container">
+      <h3>Informe os dados do dependente</h3>
+      <p>Todos os campos marcados com * são obrigatórios</p>
+
+
+      <form id="form-responsavel" novalidate>
+
+        <div class="form-section-title">Dados do dependente</div>
+
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="aluno-nome">Nome do dependente *</label>
+            <input type="text" id="aluno-nome" name="aluno-nome" placeholder="Pedro Oliveira" required>
+          </div>
+          <div class="form-group">
+            <label for="aluno-nasc">Data de nascimento *</label>
+            <input type="date" id="aluno-nasc" name="aluno-nasc" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="escola">Escola *</label>
+            <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+          </div>
+          <div class="form-group">
+            <label for="turno">Turno *</label>
+            <select id="turno" name="turno" required>
+              <option value="">Selecione...</option>
+              <option value="manha">Manhã</option>
+              <option value="tarde">Tarde</option>
+              <option value="noite">Noite</option>
+              <option value="integral">Integral</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="endereco">Endereço de embarque *</label>
+          <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade" required>
+        </div>
+
+        <div class="form-group">
+          <label for="necessidades">Necessidades especiais ou observações</label>
+          <textarea id="necessidades" name="necessidades" placeholder="Informe alergias, necessidades de acessibilidade ou qualquer informação relevante para o motorista."></textarea>
+        </div>
+
+
+<div id="alert-error" class="alert alert--error" style="display: none;"></div>
+
+<div id="alert-success" class="alert alert--success" style="display: none;"></div>
+
+<button type="submit" class="btn btn--primary btn--full">
+    <span>Criar minha conta</span>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path
+            d="M3 8h10M9 4l4 4-4 4"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        />
+    </svg>
+</button>
+
+        <p class="form-footer-note">
+          É motorista de van? <a href="cadastro-motorista.html">Cadastre-se aqui</a>
+        </p>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+  
+  <!-- Envio das informações para o backend -->
+  <script>
+document.getElementById('form-responsavel')
+.addEventListener('submit', async function(e) {
+
+    e.preventDefault();
+
+    const form = this;
+
+    const error = document.getElementById('alert-error');
+    const success = document.getElementById('alert-success');
+
+    // Limpa mensagens anteriores
+    error.style.display = 'none';
+    success.style.display = 'none';
+
+    const dados = {
+        nome: document.getElementById('nome').value.trim(),
+        cpf: document.getElementById('cpf').value.trim(),
+        telefone: document.getElementById('telefone').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        user: document.getElementById('user').value.trim(),
+        senha: document.getElementById('senha').value
+    };
+
+    try {
+
+        const response = await fetch('/responsaveis/cadastro', {
+
+            method: 'POST',
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify(dados)
+        });
+
+        const resultado = await response.json();
+
+        console.log('Resposta da API:', resultado);
+
+        // =========================
+        // ERRO DA API
+        // =========================
+
+        if (!response.ok) {
+
+            console.error('Erro retornado pela API:', resultado);
+
+            error.textContent =
+                resultado.error ||
+                resultado.detalhe ||
+                'Não foi possível realizar o cadastro.';
+
+            error.style.display = 'block';
+
+            error.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+
+            return;
+        }
+
+
+        // =========================
+        // SUCESSO
+        // =========================
+
+        success.textContent =
+            resultado.message ||
+            'Responsável cadastrado com sucesso!';
+
+        success.style.display = 'block';
+
+        success.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+
+        form.reset();
+
+    } catch (err) {
+
+        console.error('Erro ao cadastrar responsável:', err);
+
+        error.textContent =
+            'Não foi possível conectar com a API. Verifique se o servidor está funcionando.';
+
+        error.style.display = 'block';
+
+        error.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+    }
+});
+  // =========================
+  // MÁSCARA CPF
+  // =========================
+
+  document.getElementById('cpf').addEventListener('input', function() {
+
+    let v = this.value.replace(/\D/g, '');
+
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    this.value = v;
+  });
+
+
+
+  // =========================
+  // MÁSCARA TELEFONE
+  // =========================
+
+  document.getElementById('telefone').addEventListener('input', function() {
+
+    let v = this.value.replace(/\D/g, '');
+
+    v = v.replace(/^(\d{2})(\d)/, '($1) $2');
+    v = v.replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+
+    this.value = v;
+  });
+
+
+
+  </script>
+</body>
+</html>
