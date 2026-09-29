@@ -762,7 +762,7 @@ border-bottom: 4px solid #2B9A6B;
 .home-page .step h3 {
     font-family: 'Syne', sans-serif;
 
-    font-size: 1.8rem;
+    font-size: 2.3rem;
     font-weight: 700;
 
     margin-bottom: 1rem;
@@ -785,6 +785,7 @@ border-bottom: 4px solid #2B9A6B;
     margin: 1rem 0 1.5rem;
 
     font-size: 0.95rem;
+    font-weight: 500;
 }
 
 
@@ -884,8 +885,14 @@ border-bottom: 4px solid #2B9A6B;
     outline: none;
 
     color: #1E293B;
-}
 
+    font-weight: 500;   /* NOVO: negrito suave */
+}
+.home-page .login-form .form-group input::placeholder {
+    color: #475569;
+    font-weight: 600;
+    opacity: 1;
+}
 .home-page .login-form input:focus {
     border-color: #2B6A9F;
 
@@ -1519,6 +1526,46 @@ textarea:focus-visible {
     outline-offset: 3px;
 }
 
+/* =========================================================
+   PADRONIZAÇÃO: mesma espessura de borda nos dois modos
+   ========================================================= */
+
+button, input, select, textarea {
+    font-family: inherit;
+}
+
+/* Botões */
+.btn { border: 2px solid transparent; }
+.btn--secondary { border: 2px solid rgba(255, 255, 255, 0.15); }
+.btn-nav--outline { border: 2px solid rgba(255, 255, 255, 0.2); }
+
+/* Formulários */
+.form-group input,
+.form-group select,
+.form-group textarea { border: 2px solid rgba(255, 255, 255, 0.1); }
+.input-field { border: 2px solid #DCDCDC; }
+
+/* Home */
+.home-page .step { border: 2px solid rgba(0, 0, 0, 0.05); }
+.home-page .step-link { border: 2px solid transparent; cursor: pointer; }
+.home-page .login-form input { border: 2px solid #D6E0EA; }
+.home-page .login-btn { border: 2px solid transparent; } /* era "border: none" */
+
+/* Dashboard */
+.dashboard-card { border: 2px solid #1B2937; }
+.dashboard-item { border: 2px solid #959596; }
+.dashboard-field input { border: 2px solid #D1D5DB; }
+.rota-area .btn-login { border: 2px solid transparent; }
+
+/* Alertas */
+.alert--success { border: 2px solid rgba(46, 204, 113, 0.3); }
+.alert--error { border: 2px solid rgba(231, 76, 60, 0.3); }
+.alert-success { border: 2px solid #2ECC71; }
+
+/* Acessibilidade */
+.btn-acessibilidade { border: 2px solid var(--gray); }
+.painel-acessibilidade { border: 2px solid var(--gray); }
+.painel-acessibilidade button { border: 2px solid var(--gray); }
 
 /* =========================================================
    15. ALTO CONTRASTE
@@ -1620,8 +1667,8 @@ body.alto-contraste .dashboard-field input {
 
     color: #FFFFFF !important;
 
-    border:
-        2px solid #FFFFFF !important;
+    border-color:
+        #FFFFFF !important;
 }
 
 
