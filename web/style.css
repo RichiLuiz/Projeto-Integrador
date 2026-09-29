@@ -625,11 +625,14 @@ body {
 
     backdrop-filter: none;
 
+border-bottom: 4px solid #2B9A6B;
     position: relative;
 }
 
 .home-page .nav-brand {
     display: block;
+
+    
 }
 
 .home-page .nav-brand h1 {
@@ -638,12 +641,7 @@ body {
     font-size: 1.8rem;
     font-weight: 800;
 
-    background:
-        linear-gradient(
-            135deg,
-            #FFFFFF 0%,
-            #B8E1FC 100%
-        );
+    background:#FFFFFF 0%;
 
     -webkit-background-clip: text;
     background-clip: text;
@@ -659,7 +657,7 @@ body {
    ========================================================= */
 
 .home-page .hero-sub {
-    color: #FBFF00;
+    color: #FFFFFF;
 
     font-size: 1.2rem;
 
@@ -676,10 +674,12 @@ body {
 
     padding: 0.5rem 1rem;
 
+    
     border-radius: 40px;
 
     display: inline-block;
 }
+
 
 
 /* =========================================================
@@ -786,6 +786,7 @@ body {
 
     font-size: 0.95rem;
 }
+
 
 
 /* =========================================================
@@ -944,7 +945,7 @@ body {
 }
 
 .home-page .footer p {
-    color: #A3C6E0;
+    color: #FFFFFF;
 
     font-size: 0.95rem;
 
@@ -973,7 +974,9 @@ body {
     background: rgb(13, 27, 42);
 
     border-bottom:
-        1px solid #1B2937;
+        1px solid #2B9A6B;
+        
+
 }
 
 .dashboard-page .nav-links a {
@@ -1006,7 +1009,6 @@ body {
 
     font-size: 17px;
 }
-
 
 /* Container */
 
@@ -1548,9 +1550,6 @@ body.alto-contraste .home-page .navbar,
 body.alto-contraste .dashboard-page .navbar {
     background: #0A2B3E !important;
 
-    border-bottom:
-        2px solid #FFFFFF !important;
-
     box-shadow: none !important;
 
     backdrop-filter: none !important;
@@ -1559,9 +1558,6 @@ body.alto-contraste .dashboard-page .navbar {
 
 /* Textos gerais */
 
-body.alto-contraste h1,
-body.alto-contraste h2,
-body.alto-contraste h3,
 body.alto-contraste h4,
 body.alto-contraste h5,
 body.alto-contraste h6,
@@ -1573,6 +1569,16 @@ body.alto-contraste li {
     color: #000000 !important;
 }
 
+body.alto-contraste h1,
+body.alto-contraste h2,
+body.alto-contraste p2{
+    color: #FFFFFF !important;
+}
+
+
+body.alto-contraste h3{
+    color: #2B6A9F !important;
+}
 
 /* Links */
 
@@ -1829,7 +1835,7 @@ body.alto-contraste .home-page .footer {
     background: #0A2B3E !important;
 
     border-top:
-        2px solid #FFFFFF !important;
+        2px solid #2B9A6B !important;
 }
 
 body.alto-contraste .footer p {
@@ -2141,6 +2147,7 @@ body.texto-pequeno .painel-acessibilidade button {
 
     .navbar {
         padding: 16px 24px;
+        
     }
 
 
