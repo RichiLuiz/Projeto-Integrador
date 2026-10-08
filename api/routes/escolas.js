@@ -15,11 +15,11 @@ router.get('/buscar', async (req, res) => {
 
         const result = await pool.query(`
             SELECT
-                "NO_Entidade"
-            FROM "Importa_Censo_2025"
-            WHERE "NO_Entidade" ILIKE $1
-            ORDER BY "NO_Entidade"
-            LIMIT 10
+                noentidade
+            FROM importa_censo_2025
+            WHERE noentidade ILIKE $1
+            ORDER BY noentidade
+            LIMIT 3
         `, [`%${termo}%`]);
 
         res.json(result.rows);

@@ -1,259 +1,1096 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Responsável — VanEscolar</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Cadastro de Dependente — VanConecta</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+
+    /* =========================================================
+       AUTOCOMPLETE DE ESCOLAS
+       ========================================================= */
+
+    .campo-escola {
+      position: relative;
+    }
+
+    .lista-escolas {
+      display: none;
+
+      position: absolute;
+
+      top: 100%;
+      left: 0;
+      right: 0;
+
+      max-height: 220px;
+
+      overflow-y: auto;
+
+      background: #ffffff;
+
+      border: 1px solid #d9d9d9;
+
+      border-radius: 8px;
+
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.12);
+
+      z-index: 1000;
+    }
+
+    .item-escola {
+      padding: 12px 14px;
+
+      cursor: pointer;
+
+      font-size: 14px;
+
+      color: #333333;
+
+      background: #ffffff;
+
+      border-bottom:
+        1px solid #eeeeee;
+
+      transition:
+        background 0.2s ease;
+    }
+
+    .item-escola:last-child {
+      border-bottom: none;
+    }
+
+    .item-escola:hover {
+      background: #f5f5f5;
+    }
+
+    .item-escola-vazio {
+      cursor: default;
+
+      color: #777777;
+    }
+
+    .item-escola-vazio:hover {
+      background: #ffffff;
+    }
+
+  </style>
+
 </head>
+
+
 <body class="form-page">
 
+
+  <!-- =========================================================
+       NAVBAR
+       ========================================================= -->
+
   <nav class="navbar">
+
     <div class="nav-brand">
-      <a href="responsavel-dashboard.html" style="text-decoration:none;display:flex;align-items:center;gap:10px;color:inherit">
+
+      <a
+        href="responsavel-dashboard.html"
+        style="
+          text-decoration:none;
+          display:flex;
+          align-items:center;
+          gap:10px;
+          color:inherit;
+        "
+      >
+
         <span class="brand-icon">🚐</span>
-        <span class="brand-name">VanConecta - Cadastro de Dependentes</span>
+
+        <span class="brand-name">
+          VanConecta - Cadastro de Dependentes
+        </span>
+
       </a>
+
     </div>
+
+
     <div class="nav-links">
-      <a href="responsavel-dashboard.html">← Voltar</a>
+
+      <a href="responsavel-dashboard.html">
+        ← Voltar
+      </a>
+
     </div>
+
   </nav>
 
+
+
+  <!-- =========================================================
+       CONTEÚDO PRINCIPAL
+       ========================================================= -->
+
   <div class="form-main">
+
+
+    <!-- =======================================================
+         SIDEBAR
+         ======================================================= -->
+
     <div class="form-sidebar">
-      <h2>Cadastre-se com segurança</h2>
-      <p>Registre os dados do dependente. Encontre motoristas verificados na sua região.</p>
+
+      <h2>
+        Cadastre-se com segurança
+      </h2>
+
+      <p>
+        Registre os dados do dependente.
+        Encontre motoristas verificados na sua região.
+      </p>
+
+
       <ul class="sidebar-features">
-        <li><span class="feature-check">✓</span> Encontre Motoristas verificados</li>
-        <li><span class="feature-check">✓</span> Acompanhe o transporte</li>
-        <li><span class="feature-check">✓</span> Histórico de viagens</li>
+
+        <li>
+          <span class="feature-check">✓</span>
+          Encontre Motoristas verificados
+        </li>
+
+        <li>
+          <span class="feature-check">✓</span>
+          Acompanhe o transporte
+        </li>
+
+        <li>
+          <span class="feature-check">✓</span>
+          Histórico de viagens
+        </li>
+
       </ul>
+
     </div>
+
+
+
+    <!-- =======================================================
+         FORMULÁRIO
+         ======================================================= -->
 
     <div class="form-container">
-      <h3>Informe os dados do dependente</h3>
-      <p>Todos os campos marcados com * são obrigatórios</p>
+
+      <h3>
+        Informe os dados do dependente
+      </h3>
+
+      <p>
+        Todos os campos marcados com * são obrigatórios
+      </p>
 
 
-      <form id="form-responsavel" novalidate>
+      <!-- =====================================================
+           FORMULÁRIO
+           ===================================================== -->
 
-        <div class="form-section-title">Dados do dependente</div>
+      <form
+        id="form-responsavel"
+        novalidate
+      >
 
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="aluno-nome">Nome do dependente *</label>
-            <input type="text" id="aluno-nome" name="aluno-nome" placeholder="Pedro Oliveira" required>
-          </div>
-          <div class="form-group">
-            <label for="aluno-nasc">Data de nascimento *</label>
-            <input type="date" id="aluno-nasc" name="aluno-nasc" required>
-          </div>
+
+        <!-- ===================================================
+             DADOS DO DEPENDENTE
+             =================================================== -->
+
+        <div class="form-section-title">
+          Dados do dependente
         </div>
 
+
+
+        <!-- ===================================================
+             NOME + DATA DE NASCIMENTO
+             =================================================== -->
+
         <div class="form-row">
+
+
           <div class="form-group">
-            <label for="escola">Escola *</label>
-            <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+
+            <label for="aluno-nome">
+              Nome do dependente *
+            </label>
+
+            <input
+              type="text"
+              id="aluno-nome"
+              name="aluno-nome"
+              placeholder="Pedro Oliveira"
+              required
+            >
+
           </div>
+
+
+
           <div class="form-group">
-            <label for="turno">Turno *</label>
-            <select id="turno" name="turno" required>
-              <option value="">Selecione...</option>
-              <option value="manha">Manhã</option>
-              <option value="tarde">Tarde</option>
-              <option value="noite">Noite</option>
-              <option value="integral">Integral</option>
+
+            <label for="aluno-nasc">
+              Data de nascimento *
+            </label>
+
+            <input
+              type="date"
+              id="aluno-nasc"
+              name="aluno-nasc"
+              required
+            >
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- ===================================================
+             ESCOLA + TURNO
+             =================================================== -->
+
+        <div class="form-row">
+
+
+          <!-- ESCOLA -->
+
+          <div class="form-group campo-escola">
+
+            <label for="escola">
+              Escola *
+            </label>
+
+            <input
+              type="text"
+              id="escola"
+              name="escola"
+              placeholder="Digite o nome da escola"
+              autocomplete="off"
+              required
+            >
+
+
+            <!--
+              Lista preenchida pelo JavaScript
+              com as escolas encontradas no banco.
+            -->
+
+            <div
+              id="lista-escolas"
+              class="lista-escolas"
+            ></div>
+
+          </div>
+
+
+
+          <!-- TURNO -->
+
+          <div class="form-group">
+
+            <label for="turno">
+              Turno *
+            </label>
+
+            <select
+              id="turno"
+              name="turno"
+              required
+            >
+
+              <option value="">
+                Selecione...
+              </option>
+
+              <option value="manha">
+                Manhã
+              </option>
+
+              <option value="tarde">
+                Tarde
+              </option>
+
+              <option value="noite">
+                Noite
+              </option>
+
+              <option value="integral">
+                Integral
+              </option>
+
             </select>
+
           </div>
+
+
         </div>
 
 
-         <div class="form-row">
+
+        <!-- ===================================================
+             CEP + RUA
+             =================================================== -->
+
+        <div class="form-row">
+
+
           <div class="form-group">
-            <label for="escola">CEP de embarque*</label>
-            <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+
+            <label for="cep">
+              CEP de embarque *
+            </label>
+
+            <input
+              type="text"
+              id="cep"
+              name="cep"
+              placeholder="00000-000"
+              maxlength="9"
+              required
+            >
+
           </div>
+
+
+
           <div class="form-group">
-            <label for="turno">Rua</label>
-           <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+
+            <label for="rua">
+              Rua *
+            </label>
+
+            <input
+              type="text"
+              id="rua"
+              name="rua"
+              placeholder="Nome da rua"
+              required
+            >
+
           </div>
+
+
         </div>
 
-         <div class="form-row">
+
+
+        <!-- ===================================================
+             BAIRRO + NÚMERO
+             =================================================== -->
+
+        <div class="form-row">
+
+
           <div class="form-group">
-            <label for="escola">Bairro</label>
-            <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+
+            <label for="bairro">
+              Bairro *
+            </label>
+
+            <input
+              type="text"
+              id="bairro"
+              name="bairro"
+              placeholder="Nome do bairro"
+              required
+            >
+
           </div>
+
+
+
           <div class="form-group">
-            <label for="turno">Numero*</label>
-           <input type="text" id="escola" name="escola" placeholder="Nome da escola" required>
+
+            <label for="numero">
+              Número *
+            </label>
+
+            <input
+              type="text"
+              id="numero"
+              name="numero"
+              placeholder="Número"
+              required
+            >
+
           </div>
+
+
         </div>
 
+
+
+        <!-- ===================================================
+             NECESSIDADES ESPECIAIS
+             =================================================== -->
 
         <div class="form-group">
-          <label for="necessidades">Necessidades especiais ou observações</label>
-          <textarea id="necessidades" name="necessidades" placeholder="Informe alergias, necessidades de acessibilidade ou qualquer informação relevante para o motorista."></textarea>
+
+          <label for="necessidades">
+            Necessidades especiais ou observações
+          </label>
+
+          <textarea
+            id="necessidades"
+            name="necessidades"
+            placeholder="Informe alergias, necessidades de acessibilidade ou qualquer informação relevante para o motorista."
+          ></textarea>
+
         </div>
 
 
-<div id="alert-error" class="alert alert--error" style="display: none;"></div>
 
-<div id="alert-success" class="alert alert--success" style="display: none;"></div>
+        <!-- ===================================================
+             MENSAGEM DE ERRO
+             =================================================== -->
 
-<button type="submit" class="btn btn--primary btn--full">
-    <span>Adicionar Dependente</span>
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-        <path
-            d="M3 8h10M9 4l4 4-4 4"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        />
-    </svg>
-</button>
+        <div
+          id="alert-error"
+          class="alert alert--error"
+          style="display: none;"
+        ></div>
 
+
+
+        <!-- ===================================================
+             MENSAGEM DE SUCESSO
+             =================================================== -->
+
+        <div
+          id="alert-success"
+          class="alert alert--success"
+          style="display: none;"
+        ></div>
+
+
+
+        <!-- ===================================================
+             BOTÃO
+             =================================================== -->
+
+        <button
+          type="submit"
+          class="btn btn--primary btn--full"
+        >
+
+          <span>
+            Adicionar Dependente
+          </span>
+
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+
+            <path
+              d="M3 8h10M9 4l4 4-4 4"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+
+          </svg>
+
+        </button>
+
+
+      </form>
 
     </div>
+
   </div>
 
+
+
+  <!-- =========================================================
+       JAVASCRIPT PRINCIPAL
+       ========================================================= -->
+
   <script src="main.js"></script>
-  
-  <!-- Envio das informações para o backend -->
+
+
+
+  <!-- =========================================================
+       JAVASCRIPT DO CADASTRO DO DEPENDENTE
+       ========================================================= -->
+
   <script>
-document.getElementById('form-responsavel')
-.addEventListener('submit', async function(e) {
 
-    e.preventDefault();
 
-    const form = this;
+    /* =========================================================
+       AUTOCOMPLETE DE ESCOLAS
+       ========================================================= */
 
-    const error = document.getElementById('alert-error');
-    const success = document.getElementById('alert-success');
+    const campoEscola =
+      document.getElementById('escola');
 
-    // Limpa mensagens anteriores
-    error.style.display = 'none';
-    success.style.display = 'none';
+    const listaEscolas =
+      document.getElementById('lista-escolas');
 
-    const dados = {
-        nome: document.getElementById('nome').value.trim(),
-        cpf: document.getElementById('cpf').value.trim(),
-        telefone: document.getElementById('telefone').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        user: document.getElementById('user').value.trim(),
-        senha: document.getElementById('senha').value
-    };
+    let tempoBusca;
 
-    try {
 
-        const response = await fetch('/responsaveis/cadastro', {
+    /*
+     * Monitora o que o responsável está digitando.
+     */
 
-            method: 'POST',
+    if (campoEscola && listaEscolas) {
 
-            headers: {
-                'Content-Type': 'application/json'
-            },
+      campoEscola.addEventListener(
+        'input',
+        function () {
 
-            body: JSON.stringify(dados)
-        });
+          const nome =
+            this.value.trim();
 
-        const resultado = await response.json();
 
-        console.log('Resposta da API:', resultado);
+          clearTimeout(tempoBusca);
 
-        // =========================
-        // ERRO DA API
-        // =========================
 
-        if (!response.ok) {
+          /*
+           * Não consulta o banco com menos
+           * de 2 caracteres.
+           */
 
-            console.error('Erro retornado pela API:', resultado);
+          if (nome.length < 3) {
 
-            error.textContent =
-                resultado.error ||
-                resultado.detalhe ||
-                'Não foi possível realizar o cadastro.';
+            listaEscolas.innerHTML = '';
 
-            error.style.display = 'block';
-
-            error.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
+            listaEscolas.style.display =
+              'none';
 
             return;
+
+          }
+
+
+          /*
+           * Aguarda 300ms antes de fazer
+           * a consulta.
+           */
+
+          tempoBusca =
+            setTimeout(() => {
+
+              buscarEscolas(nome);
+
+            }, 300);
+
+        }
+      );
+
+
+
+      /* =======================================================
+         FUNÇÃO PARA BUSCAR ESCOLAS
+         ======================================================= */
+
+      async function buscarEscolas(nome) {
+
+        try {
+
+
+          const response =
+            await fetch(
+              `/escolas/buscar?nome=${encodeURIComponent(nome)}`
+            );
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              'Não foi possível consultar as escolas.'
+            );
+
+          }
+
+
+          const escolas =
+            await response.json();
+
+
+          /*
+           * Limpa resultados anteriores.
+           */
+
+          listaEscolas.innerHTML = '';
+
+
+
+          /*
+           * Nenhuma escola encontrada.
+           */
+
+          if (
+            !escolas ||
+            escolas.length === 0
+          ) {
+
+            listaEscolas.innerHTML = `
+              <div class="item-escola item-escola-vazio">
+                Nenhuma escola encontrada.
+              </div>
+            `;
+
+            listaEscolas.style.display =
+              'block';
+
+            return;
+
+          }
+
+
+
+          /*
+           * Cria cada opção encontrada.
+           */
+
+          escolas.forEach(escola => {
+
+
+            const item =
+              document.createElement('div');
+
+
+            item.className =
+              'item-escola';
+
+
+            /*
+             * Nome retornado pelo banco.
+             */
+
+            item.textContent =
+              escola.noentidade;
+
+
+
+            /*
+             * Seleciona a escola.
+             */
+
+            item.addEventListener(
+              'click',
+              function () {
+
+                campoEscola.value =
+                  escola.noentidade;
+
+
+                listaEscolas.innerHTML =
+                  '';
+
+
+                listaEscolas.style.display =
+                  'none';
+
+              }
+            );
+
+
+
+            listaEscolas.appendChild(item);
+
+          });
+
+
+
+          /*
+           * Mostra a lista.
+           */
+
+          listaEscolas.style.display =
+            'block';
+
+
+        } catch (erro) {
+
+
+          console.error(
+            'Erro ao buscar escolas:',
+            erro
+          );
+
+
+          listaEscolas.innerHTML =
+            '';
+
+
+          listaEscolas.style.display =
+            'none';
+
         }
 
+      }
 
-        // =========================
-        // SUCESSO
-        // =========================
 
-        success.textContent =
-            resultado.message ||
-            'Responsável cadastrado com sucesso!';
 
-        success.style.display = 'block';
+      /* =======================================================
+         FECHAR LISTA AO CLICAR FORA
+         ======================================================= */
 
-        success.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-        });
+      document.addEventListener(
+        'click',
+        function (evento) {
 
-        form.reset();
 
-    } catch (err) {
+          if (
+            !campoEscola.contains(
+              evento.target
+            ) &&
 
-        console.error('Erro ao cadastrar responsável:', err);
+            !listaEscolas.contains(
+              evento.target
+            )
+          ) {
 
-        error.textContent =
-            'Não foi possível conectar com a API. Verifique se o servidor está funcionando.';
+            listaEscolas.innerHTML =
+              '';
 
-        error.style.display = 'block';
+            listaEscolas.style.display =
+              'none';
 
-        error.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-        });
+          }
+
+        }
+      );
+
     }
-});
-  // =========================
-  // MÁSCARA CPF
-  // =========================
-
-  document.getElementById('cpf').addEventListener('input', function() {
-
-    let v = this.value.replace(/\D/g, '');
-
-    v = v.replace(/(\d{3})(\d)/, '$1.$2');
-    v = v.replace(/(\d{3})(\d)/, '$1.$2');
-    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-
-    this.value = v;
-  });
 
 
 
-  // =========================
-  // MÁSCARA TELEFONE
-  // =========================
+    /* =========================================================
+       ENVIO DO CADASTRO DO DEPENDENTE
+       ========================================================= */
 
-  document.getElementById('telefone').addEventListener('input', function() {
-
-    let v = this.value.replace(/\D/g, '');
-
-    v = v.replace(/^(\d{2})(\d)/, '($1) $2');
-    v = v.replace(/(\d{5})(\d{1,4})$/, '$1-$2');
-
-    this.value = v;
-  });
+    document
+      .getElementById('form-responsavel')
+      .addEventListener(
+        'submit',
+        async function (e) {
 
 
+          e.preventDefault();
+
+
+          const form =
+            this;
+
+
+          const error =
+            document.getElementById(
+              'alert-error'
+            );
+
+
+          const success =
+            document.getElementById(
+              'alert-success'
+            );
+
+
+          /*
+           * Limpa mensagens anteriores.
+           */
+
+          error.style.display =
+            'none';
+
+          success.style.display =
+            'none';
+
+
+
+          /*
+           * Verifica os campos obrigatórios.
+           */
+
+          if (!form.checkValidity()) {
+
+            form.reportValidity();
+
+            return;
+
+          }
+
+
+
+          /*
+           * Obtém os dados do formulário.
+           */
+
+          const dados = {
+
+
+            nome:
+              document
+                .getElementById(
+                  'aluno-nome'
+                )
+                .value
+                .trim(),
+
+
+            dtnasc:
+              document
+                .getElementById(
+                  'aluno-nasc'
+                )
+                .value,
+
+
+            escola:
+              document
+                .getElementById(
+                  'escola'
+                )
+                .value
+                .trim(),
+
+
+            turno:
+              document
+                .getElementById(
+                  'turno'
+                )
+                .value,
+
+
+            cep:
+              document
+                .getElementById(
+                  'cep'
+                )
+                .value
+                .trim(),
+
+
+            rua:
+              document
+                .getElementById(
+                  'rua'
+                )
+                .value
+                .trim(),
+
+
+            bairro:
+              document
+                .getElementById(
+                  'bairro'
+                )
+                .value
+                .trim(),
+
+
+            numero:
+              document
+                .getElementById(
+                  'numero'
+                )
+                .value
+                .trim(),
+
+
+            necessidades:
+              document
+                .getElementById(
+                  'necessidades'
+                )
+                .value
+                .trim()
+
+          };
+
+
+
+          console.log(
+            'Dados enviados para a API:',
+            dados
+          );
+
+
+
+          try {
+
+
+            /*
+             * Envia os dados para o backend.
+             */
+
+            const response =
+              await fetch(
+                '/dependentes/cadastro',
+                {
+
+                  method: 'POST',
+
+                  headers: {
+                    'Content-Type':
+                      'application/json'
+                  },
+
+                  body:
+                    JSON.stringify(dados)
+
+                }
+              );
+
+
+
+            /*
+             * Tenta converter a resposta
+             * da API para JSON.
+             */
+
+            const resultado =
+              await response.json();
+
+
+
+            console.log(
+              'Resposta da API:',
+              resultado
+            );
+
+
+
+            /* =================================================
+               ERRO DA API
+               ================================================= */
+
+            if (!response.ok) {
+
+
+              console.error(
+                'Erro retornado pela API:',
+                resultado
+              );
+
+
+              error.textContent =
+                resultado.error ||
+                resultado.detalhe ||
+                'Não foi possível cadastrar o dependente.';
+
+
+              error.style.display =
+                'block';
+
+
+              error.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+              });
+
+
+              return;
+
+            }
+
+
+
+            /* =================================================
+               SUCESSO
+               ================================================= */
+
+            success.textContent =
+              resultado.message ||
+              'Dependente cadastrado com sucesso!';
+
+
+            success.style.display =
+              'block';
+
+
+            success.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center'
+            });
+
+
+
+            /*
+             * Limpa o formulário.
+             */
+
+            form.reset();
+
+
+
+            /*
+             * Limpa a lista de escolas.
+             */
+
+            if (listaEscolas) {
+
+              listaEscolas.innerHTML =
+                '';
+
+              listaEscolas.style.display =
+                'none';
+
+            }
+
+
+          } catch (err) {
+
+
+            console.error(
+              'Erro ao cadastrar dependente:',
+              err
+            );
+
+
+            error.textContent =
+              'Não foi possível conectar com a API. ' +
+              'Verifique se o servidor está funcionando.';
+
+
+            error.style.display =
+              'block';
+
+
+            error.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center'
+            });
+
+          }
+
+        }
+      );
 
   </script>
+
+
 </body>
+
 </html>
