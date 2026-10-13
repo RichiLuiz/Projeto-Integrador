@@ -42,9 +42,28 @@ router.get('/dashboard/:username', async (req, res) => {
         const responsavel = responsavelResult.rows[0];
 
         // =========================
-        // BUSCA ALUNO
+        // BUSCA Dependente
         // =========================
-   
+        const dependenteResult = await pool.query(`
+            SELECT
+                    D.nome,
+                    D.escola,
+                    D.turno,
+                    D.ponto_embarque
+                FROM dependente D
+                INNER JOIN responsaveis U
+                    ON R.id_responsavel = U.id_responsavel
+                WHERE U.username = $1
+        `, [username]);
+
+        if (dependenteResult.rows.length === 0) {
+
+            return res.status(404).json({
+                error: 'Dependente não encontrado'
+            });
+        }
+
+        const dependente = responsavelResult.rows[0];
         // =========================
         // Busca Motorista
         // =========================

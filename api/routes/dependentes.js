@@ -118,6 +118,17 @@ router.post('/cadastro', async (req, res) => {
             ]
         );
 
+const responsavelqtddependentes = await client.query(
+    `UPDATE responsaveis R
+     SET qtddependentes = COALESCE(R.qtddependentes, 0) + 1
+     FROM users U
+     WHERE R.userid = U.userid
+       AND U.username = $1
+     RETURNING R.id_responsavel, R.qtddependentes`,
+    [username]
+);
+
+
         /* =================================================
            RETORNO DO CADASTRO
            ================================================= */
