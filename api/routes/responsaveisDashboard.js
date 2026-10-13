@@ -1,106 +1,110 @@
+
 const express = require('express');
 const router = express.Router();
 
 const { pool } = require('../db');
 
 router.get('/dashboard/:username', async (req, res) => {
-
     try {
-
         const { username } = req.params;
 
-        // =========================
-        // BUSCA RESPONSÁVEL
-        // =========================
+        if (!username) {
+            return res.status(400).json({
+                error: 'Nome de usuário não informado.'
+            });
+        }
+
+        // =====================================
+        // 1. BUSCAR RESPONSÁVEL PELO USUÁRIO
+        // =====================================
 
         const responsavelResult = await pool.query(`
             SELECT
-                    R.id_responsavel,
-                    R.nome,
-                    R.cpf,
-                    R.contato1,
-                    R.contato2,
-                    R.email,
-                    R.endereco,
-                    R.numero,
-                    R.cep,
-                    R.qtddependentes,
-                    U.username
-                FROM responsaveis R
-                INNER JOIN users U
-                    ON R.userid = U.userid
-                WHERE U.username = $1
+                R.id_responsavel,
+                R.nome,
+                R.cpf,
+                R.contato1,
+                R.contato2,
+                R.email,
+                R.endereco,
+                R.numero,
+                R.cep,
+                U.username
+            FROM responsaveis R
+            INNER JOIN users U
+                ON R.userid = U.userid
+            WHERE U.username = $1
+            LIMIT 1
         `, [username]);
 
         if (responsavelResult.rows.length === 0) {
-
             return res.status(404).json({
-                error: 'Responsável não encontrado'
+                error: 'Responsável não encontrado.'
             });
         }
 
         const responsavel = responsavelResult.rows[0];
 
-        // =========================
-        // BUSCA Dependente
-        // =========================
+        // =====================================
+        // 2. BUSCAR SOMENTE OS DEPENDENTES
+        //    DESTE RESPONSÁVEL
+        // =====================================
+
         const dependenteResult = await pool.query(`
             SELECT
-                    D.nome,
-                    D.escola,
-                    D.turno,
-                    D.ponto_embarque
-                FROM dependente D
-                INNER JOIN responsaveis U
-                    ON R.id_responsavel = U.id_responsavel
-                WHERE U.username = $1
-        `, [username]);
+                D.id_dependente,
+                D.nome,
+                D.data_nascimento,
+                D.escola,
+                D.turno,
+                D.ponto_embarque,
+                D.ponto_desembarque,
+                D.ativo
+            FROM dependente D
+            WHERE D.id_responsavel = $1
+            ORDER BY D.id_dependente
+        `, [responsavel.id_responsavel]);
 
-        if (dependenteResult.rows.length === 0) {
+        const dependentes = dependenteResult.rows;
+        const qtdDependentes = dependentes.length;
 
-            return res.status(404).json({
-                error: 'Dependente não encontrado'
-            });
-        }
+        // =====================================
+        // 3. BUSCAR MOTORISTAS ATIVOS
+        // =====================================
 
-        const dependente = responsavelResult.rows[0];
-        // =========================
-        // Busca Motorista
-        // =========================
-
-        const motoristasResult =await pool.query(`
-                    SELECT
-                    M.nomemotorista,
-                    M.tempoexperiencia,
-                    M.regiaoatuacao,
-                    M.contato1
-                    from motoristas M
-                    WHERE M.ativo= true
+        const motoristasResult = await pool.query(`
+            SELECT
+                M.nomemotorista
+            FROM motoristas M
+            WHERE M.ativo = TRUE
+            ORDER BY M.nomemotorista
         `);
 
+        // =====================================
+        // 4. RETORNAR DADOS PARA O FRONTEND
+        // =====================================
 
+        return res.status(200).json({
+            responsavel: {
+                ...responsavel,
+                qtddependentes: qtdDependentes
+            },
+            qtddependentes: qtdDependentes,
+            dependentes,
+            motoristas: motoristasResult.rows
+        });
 
-        // =========================
-        // RETORNO
-        // =========================
+    } catch (erro) {
+        console.error(
+            'ERRO DASHBOARD RESPONSAVEL:',
+            erro
+        );
 
-        res.json({
-    responsavel,
-    qtddependentes: responsavel.qtddependentes,
-    dependentes: [],
-    motoristas: motoristasResult.rows
-});
-
-    } catch (err) {
-
-        console.log('ERRO DASHBOARD RESPONSAVEL:', err);
-
-        res.status(500).json({
-            error: 'Erro ao carregar dashboard',
-            detalhe: err.message
+        return res.status(500).json({
+            error: 'Erro ao carregar dashboard.',
+            detalhe: erro.message
         });
     }
-
 });
 
 module.exports = router;
