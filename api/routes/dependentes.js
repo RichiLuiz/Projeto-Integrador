@@ -2,246 +2,146 @@ const express = require('express');
 const router = express.Router();
 
 const { pool } = require('../db');
-const { v4: uuidv4 } = require('uuid');
 
-const { cpf } = require('cpf-cnpj-validator');
+/* =========================================================
+   CADASTRO DE DEPENDENTE
+   Vincula o dependente ao responsável identificado pelo login.
+   ========================================================= */
 
 router.post('/cadastro', async (req, res) => {
+    let client;
 
-    const client = await pool.connect();
-    const bcrypt = require('bcrypt');
     try {
+        client = await pool.connect();
 
         const {
             nome,
-            cpf: cpfRecebido,
-            telefone,
-            email,
-            user,
-            senha
+            dtnasc,
+            escola,
+            turno,
+            cep,
+            rua,
+            bairro,
+            numero,
+            necessidades,
+            username
         } = req.body;
 
-        // =========================
-        // VALIDAÇÕES
-        // =========================
+        /* =================================================
+           VALIDAÇÃO DOS CAMPOS OBRIGATÓRIOS
+           ================================================= */
 
-        // LOGIN
-        if (!user || user.trim().length < 4) {
-
+        if (
+            !nome ||
+            !dtnasc ||
+            !escola ||
+            !turno ||
+            !cep ||
+            !rua ||
+            !bairro ||
+            !numero
+        ) {
             return res.status(400).json({
-                error: 'Login deve possuir no mínimo 4 caracteres'
+                error: 'Preencha todos os campos obrigatórios.'
             });
         }
 
-        // SENHA
-        if (!senha || senha.length < 8) {
-
-            return res.status(400).json({
-                error: 'Senha deve possuir no mínimo 8 caracteres'
+        if (!username) {
+            return res.status(401).json({
+                error: 'Não foi possível identificar o responsável conectado.'
             });
         }
 
-        // CPF
-        if (!cpfRecebido || !cpf.isValid(cpfRecebido)) {
+        /* =================================================
+           LOCALIZA O RESPONSÁVEL NO BANCO
+           userid é UUID nas duas tabelas.
+           ================================================= */
 
-            return res.status(400).json({
-                error: 'CPF inválido'
-            });
-        }
-
-        // EMAIL
-        if (!email || !email.includes('@')) {
-
-            return res.status(400).json({
-                error: 'Email inválido'
-            });
-        }
-
-        // =========================
-        // VERIFICA LOGIN
-        // =========================
-
-        const loginExiste = await client.query(`
-                SELECT userid
-                FROM users
-                WHERE username = $1
-            `,[user]
+        const consultaResponsavel = await client.query(
+            `SELECT R.id_responsavel
+             FROM responsaveis R
+             INNER JOIN users U
+                 ON R.userid = U.userid
+             WHERE U.username = $1
+             LIMIT 1`,
+            [username]
         );
 
-        if (loginExiste.rows.length > 0) {
-
-            return res.status(400).json({
-                error: 'Login de usuário já cadastrado, favor escolher outro'
+        if (consultaResponsavel.rows.length === 0) {
+            return res.status(404).json({
+                error: 'Responsável não encontrado.'
             });
         }
 
-        // =========================
-        // VERIFICA EMAIL
-        // =========================
+        const idResponsavel =
+            consultaResponsavel.rows[0].id_responsavel;
 
-        const emailExiste = await client.query(
-            `
-                SELECT userid
-                FROM responsaveis
-                WHERE Email = $1
-            `, [email] );
+        /* =================================================
+           PREPARA OS DADOS DO DEPENDENTE
+           A coluna necessidadeespecial é BOOLEAN.
+           ================================================= */
 
-        if (emailExiste.rows.length > 0) {
+        const necessidadeEspecial =
+            necessidades === true ||
+            necessidades === 'true' ||
+            necessidades === 'on' ||
+            necessidades === 'sim';
 
-            return res.status(400).json({
-                error: 'Email já cadastrado'
-            });
-        }
+        const pontoEmbarque =
+            `${rua.trim()}, ${numero.trim()}, ` +
+            `${bairro.trim()} - CEP: ${cep.trim()}`;
 
-        // =========================
-        // VERIFICA CPF
-        // =========================
+        /* =================================================
+           INSERE O DEPENDENTE NO SUPABASE
+           ================================================= */
 
-        const cpfExiste = await client.query(
-            `
-                SELECT userid
-                FROM responsaveis
-                WHERE cpf = $1
-            `,
-            [cpfRecebido]
-        );
-
-        if (cpfExiste.rows.length > 0) {
-
-            return res.status(400).json({
-                error: 'CPF já cadastrado'
-            });
-        }
-
-        // =========================
-        // BUSCA ROLE
-        // =========================
-
-        const roleResult = await client.query(
-            `
-                SELECT roleid
-                FROM roles
-                WHERE rolename = 'Responsavel'
-            `);
-
-        if (roleResult.rows.length === 0) {
-
-            return res.status(400).json({
-                error: 'Role Responsavel não encontrada'
-            });
-        }
-
-        const roleId = roleResult.rows[0].roleid;
-
-        const userId = uuidv4();
-
-
-        // =========================
-        // INICIA TRANSACTION
-        // =========================
-        await client.query('BEGIN');
-
-
-        // =========================
-        // HASH DA SENHA
-        // =========================
-        const senhaHash = await bcrypt.hash(senha, 10);
-
-
-        // =========================
-        // INSERT USERS
-        // =========================
-
-        await client.query(
-            `
-                INSERT INTO Users
-                (
-                    userid,
-                    username,
-                    roleid,
-                    passwordhash
-                )
-                VALUES
-                (
-                    $1,
-                    $2,
-                    $3,
-                    $4
-                )
-            `,
+        const resultado = await client.query(
+            `INSERT INTO dependente (
+                nome,
+                data_nascimento,
+                escola,
+                turno,
+                ponto_embarque,
+                observacao,
+                id_responsavel
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING id_dependente, id_responsavel`,
             [
-                userId,
-                user,
-                roleId,
-                senhaHash
+                nome.trim(),
+                dtnasc,
+                escola.trim(),
+                turno,
+                pontoEmbarque,
+                necessidadeEspecial,
+                idResponsavel
             ]
         );
 
-        // =========================
-        // INSERT RESPONSAVEL
-        // =========================
+        /* =================================================
+           RETORNO DO CADASTRO
+           ================================================= */
 
-        const responsavelResult =await client.query(
-            `
-             INSERT INTO Responsaveis
-                    (
-                        userid,
-                        nome,
-                        cpf,
-                        contato1,
-                        email
-                    )
-                    VALUES
-                    (
-                    $1,
-                    $2,
-                    $3,
-                    $4,
-                    $5
-                    )
-                `,
-                [
-                userId,
-                nome,
-                cpfRecebido,
-                telefone,
-                email    
-                ]
-            
-                );
-
-
-        // =========================
-        // COMMIT
-        // =========================
-
-        await client.query('COMMIT');
-
-        res.status(201).json({
-            message: 'Responsável cadastrado com sucesso'
+        return res.status(201).json({
+            message: 'Dependente cadastrado com sucesso!',
+            dependente: resultado.rows[0]
         });
 
-    } catch (err) {
+    } catch (erro) {
+        console.error(
+            'Erro ao cadastrar dependente:',
+            erro
+        );
 
-        console.log('ERRO REAL:', err);
-
-       // =========================
-        // ROLLBACK
-        // =========================
-
-        try {
-            await client.query('ROLLBACK');
-        } catch {}
-
-        res.status(500).json({
-            error: 'Erro no cadastro',
-            detalhe: err.message
+        return res.status(500).json({
+            error: 'Erro interno ao cadastrar dependente.',
+            detalhe: erro.message
         });
 
     } finally {
-
-        client.release();
-
+        if (client) {
+            client.release();
+        }
     }
 });
 

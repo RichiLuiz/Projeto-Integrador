@@ -21,6 +21,9 @@ const responsavelDashboardRoutes =
 const escolasRoutes =
     require('./routes/escolas');
 
+const dependentesRoutes = 
+    require('./routes/dependentes');
+
 
     
 const app = express();
@@ -46,6 +49,7 @@ app.use('/auth', authRoutes);
 
 app.use('/escolas', escolasRoutes);
 
+app.use('/dependentes', dependentesRoutes);
 // DASHBOARDS
 
 app.use(

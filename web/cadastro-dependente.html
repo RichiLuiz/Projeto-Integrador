@@ -326,15 +326,15 @@
                 Selecione...
               </option>
 
-              <option value="manha">
+              <option value="Manha">
                 Manhã
               </option>
 
-              <option value="tarde">
+              <option value="Tarde">
                 Tarde
               </option>
 
-              <option value="noite">
+              <option value="Noite">
                 Noite
               </option>
 
@@ -925,8 +925,10 @@
                   'necessidades'
                 )
                 .value
-                .trim()
-
+                .trim(),
+                
+          // Identifica o responsável que está realizando o cadastro
+              username: localStorage.getItem('username')
           };
 
 
