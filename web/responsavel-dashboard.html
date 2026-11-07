@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -8,19 +7,33 @@
 
     <title>Painel do Responsável — VanConecta</title>
 
+    <!-- Font Awesome (ícones) - fica ANTES do style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <link rel="stylesheet" href="style.css">
 
     <link
         href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
-        rel="stylesheet"
-    >
+        rel="stylesheet">
+
+    <!-- Ajuste de espaçamento dos ícones -->
+    <style>
+        .card-title i,
+        .brand-icon i {
+            margin-right: 8px;
+        }
+
+        .brand-icon i {
+            margin-right: 0;
+        }
+    </style>
 </head>
 
 <body class="dashboard-page">
 
     <nav class="navbar">
         <div class="nav-brand">
-            <span class="brand-icon">👨‍👩‍👧</span>
+            <span class="brand-icon"><i class="fa-solid fa-people-roof"></i></span>
             <span class="brand-name">
                 VanConecta — Área do Responsável
             </span>
@@ -32,7 +45,7 @@
     </nav>
 
     <section class="dashboard-header">
-        <h1>Bem-vindo responsável 👋</h1>
+        <h1>Bem-vindo, responsável</h1>
         <p>
             Aqui você pode visualizar seus dados,
             seus dependentes e os motoristas disponíveis.
@@ -44,7 +57,7 @@
         <!-- DADOS DO RESPONSÁVEL -->
         <section class="dashboard-card">
             <div class="card-title">
-                👨‍👩‍👧 Dados do Responsável
+                <i class="fa-solid fa-id-card"></i> Dados do Responsável
             </div>
 
             <div class="dashboard-grid">
@@ -96,12 +109,9 @@
         </section>
 
         <!-- DEPENDENTES -->
-        <section
-            class="dashboard-card"
-            id="dependentes-section"
-        >
+        <section class="dashboard-card" id="dependentes-section">
             <div class="card-title">
-                🎒 Dependentes cadastrados
+                <i class="fa-solid fa-children"></i> Dependentes cadastrados
             </div>
 
             <div id="dependentes-container">
@@ -112,17 +122,13 @@
         <!-- CADASTRAR DEPENDENTE -->
         <section class="dashboard-card">
             <div class="card-title">
-                👨‍👩‍👧 Adicionar dependente
+                <i class="fa-solid fa-user-plus"></i> Adicionar dependente
             </div>
 
             <div class="dashboard-item">
                 <span>Cadastre outro dependente quando precisar.</span>
 
-                <button
-                    type="button"
-                    id="cadastrar-dependente-btn"
-                    class="btn-primary"
-                >
+                <button type="button" id="cadastrar-dependente-btn" class="btn-primary">
                     + Cadastrar novo dependente
                 </button>
             </div>
@@ -131,17 +137,14 @@
         <!-- MOTORISTAS -->
         <section class="dashboard-card">
             <div class="card-title">
-                👨‍✈️ Motoristas disponíveis
+                <i class="fa-solid fa-van-shuttle"></i> Motoristas disponíveis
             </div>
 
             <div class="dashboard-grid">
                 <div class="dashboard-item">
                     <span>SELECIONAR MOTORISTA</span>
 
-                    <select
-                        id="motorista-select"
-                        class="input-field"
-                    >
+                    <select id="motorista-select" class="input-field">
                         <option value="">
                             Selecione um motorista
                         </option>
@@ -202,6 +205,19 @@
             return item;
         }
 
+        // Cria um título de card com ícone do Font Awesome
+        function criarTitulo(classeIcone, texto) {
+            const titulo = document.createElement('div');
+            titulo.className = 'card-title';
+
+            const icone = document.createElement('i');
+            icone.className = classeIcone;
+
+            titulo.append(icone, ` ${texto}`);
+
+            return titulo;
+        }
+
         function formatarData(data) {
             if (!data) return '-';
 
@@ -235,9 +251,10 @@
                 const card = document.createElement('div');
                 card.className = 'dashboard-card dependente-card';
 
-                const titulo = document.createElement('div');
-                titulo.className = 'card-title';
-                titulo.textContent = `🎒 Dependente ${index + 1}`;
+                const titulo = criarTitulo(
+                    'fa-solid fa-child',
+                    `Dependente ${index + 1}`
+                );
 
                 const grade = document.createElement('div');
                 grade.className = 'dashboard-grid';
@@ -250,7 +267,7 @@
                     ),
                     criarCampo('ESCOLA', dependente.escola),
                     criarCampo('TURNO', dependente.turno),
-                    
+
                     criarCampo(
                         'PONTO DE EMBARQUE',
                         dependente.ponto_embarque
@@ -312,9 +329,10 @@
                 const card = document.createElement('div');
                 card.className = 'dashboard-card motorista-card';
 
-                const titulo = document.createElement('div');
-                titulo.className = 'card-title';
-                titulo.textContent = '👨‍✈️ Dados do motorista';
+                const titulo = criarTitulo(
+                    'fa-solid fa-id-badge',
+                    'Dados do motorista'
+                );
 
                 const grade = document.createElement('div');
                 grade.className = 'dashboard-grid';
@@ -463,4 +481,5 @@
     </script>
 
 </body>
+
 </html>
